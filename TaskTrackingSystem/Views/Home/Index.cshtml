@@ -1,0 +1,284 @@
+﻿@{
+    /**/
+
+    ViewBag.Title = "Home Page";
+}
+
+@*<div class="row">
+        <div class="col-lg-12">
+            <i class="fa fa-plus-square fa-2x"></i> &nbsp;
+            <i class="fa fa-minus-square fa-2x"></i>
+        </div>
+    </div>*@
+<hr />
+<div style="margin-left:20px;">
+    <div class="row">
+        <div class="col-lg-7" style="min-height: 65vh; border-right: solid;border-right-color: #3c8dbc;">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="jstree"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="col-md-12" id="tbl_side_view" style="display:none">
+                <div class="panel" style=" border-color:#3c8dbc">
+                    <div id="div-initiative-name" class="panel-heading" style="background-color: #3c8dbc;color:white">
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-11">
+                            <table class="table table-hover" id="tbl_side_view_tbl">
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*< !--Modal content-- >*@
+
+@*Add Group*@
+<div id="prompt-add-group" class="modal">
+    <div class="modal-content panel" style="border-radius: 10px; width:40%;border-color:#3c8dbc">
+        <div class="panel-heading" style="background-color: #3c8dbc;color:white">
+            <h3 class="panel-title">Add Group  <i class="close fa fa-window-close" style="float:right"></i></h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group" style="padding: 20px 0px 20px 10px;">
+                <label class="sr-only"> Title</label>
+                <input type="text" class="form-control" placeholder="Group Title" style="width:100%;margin:auto;" id="input-add-group-title" />
+            </div>
+        </div>
+        <div class="panel-footer" style="padding:5px;">
+            <div class="col-sm-offset-10">
+                <button id="btn-add-group" type="submit" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Add Task*@
+<div id="prompt-add-task" class="modal">
+    <div class="modal-content panel" style="border-radius: 10px; width:40%;border-color:#3c8dbc">
+        <div class="panel-heading" style="background-color: #3c8dbc;color:white">
+            <h3 class="panel-title">Add Task  <i class="close fa fa-window-close" style="float:right"></i></h3>
+
+        </div>
+        <div class="panel-body">
+            <div class="form-group" style="padding: 20px 10px 20px 10px;">
+                <label class="sr-only"> Title</label>
+                <input type="text" id="input-add-task-title" class="form-control" placeholder="Task Title" style="width:100%;margin:auto;" />
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="control-label">Due Date :</label>
+                <input type="text" class="form-control" id="input-add-task-duedate" placeholder="Select Date" readonly>
+            </div>
+            <div class="form-group col-sm-6">
+                <div class="row">
+                    <label class="control-label">Assign To :</label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <input class="form-control" id="input-add-task-assignedto" placeholder="Enter Staff No">
+                        <input id="search-result-user-id" style="display:none">
+                    </div>
+                    <div class="col-lg-4"> 
+                        <button id="search-user" type="submit" class="btn btn-primary">Serch</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer" style="padding:5px;">
+            <div class="col-sm-offset-10">
+                <button id="btn-add-task-rout" type="submit" style="display:none" class="btn btn-primary">Create</button>
+                <button id="btn-add-task" type="submit" style="display:none" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Add Initiative*@
+<div id="prompt-add-initiative" class="modal">
+    <div class="modal-content panel" style="border-radius: 10px; width:50%;border-color:#3c8dbc">
+
+        <div class="panel-heading" style="background-color: #3c8dbc;color:white">
+            <h3 class="panel-title">Add Initiative  <i class="close fa fa-window-close" style="float:right"></i></h3>
+
+        </div>
+
+        <div class="panel-body" style="max-height:400px;overflow-y:scroll">
+            <div class="form-group" style="padding: 20px 10px 20px 10px;">
+                <label class="sr-only"> Title</label>
+                <input type="text" id="input-add-initiative-title" class="form-control" placeholder="Initiative Title" style="width:100%;margin:auto;" />
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="control-label">Work Group Responsibility :</label>
+                <select id="input-add-initiative-wgr" class="form-control">
+                    <option value="">--select user--</option>
+                    <option value="SP7403">Gihan Akalanka</option>
+                    <option value="SP7401">Nayon Fonseka</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="control-label">Core Group Responsibility :</label>
+                <select id="input-add-initiative-cgr" class="form-control">
+                    <option value="">--select user--</option>
+                    <option value="SP7403">Gihan Akalanka</option>
+                    <option value="SP7401">Nayon Fonseka</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Projected DOC</label>
+                <input type="text" class="form-control" id="input-add-initiative-pdoc" placeholder="">
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Projected Net Revenue</label>
+                <input type="text" class="form-control" id="input-add-initiative-pnr" placeholder="">
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label">Initiative Not Carried Through and Why</label>
+                <input type="text" class="form-control" id="input-add-initiative-inctaw" placeholder="">
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Projected Contribution</label>
+                <input type="text" class="form-control" id="input-add-initiative-pc" placeholder="">
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Expected Achieved contribution</label>
+                <input type="text" class="form-control" id="input-add-initiative-eac" placeholder="">
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Achieved contribution</label>
+                <input type="text" class="form-control" id="input-add-initiative-ac" placeholder="">
+            </div>
+            <div class="form-group col-sm-2">
+                <label class="control-label">GAP</label>
+                <input type="text" class="form-control" id="input-add-initiative-gap" placeholder="">
+            </div>
+
+        </div>
+        <div class="panel-footer" style="padding:5px 15px 5px 5px;">
+            <div class="col-sm-offset-11">
+                <button type="submit" id="btn-add-initiative" class="btn btn-primary">Create</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Update Initiative*@
+<div id="prompt-update-initiative" class="modal">
+    <div class="modal-content panel" style="border-radius: 10px; width:50%;border-color:#3c8dbc">
+
+        <div class="panel-heading" style="background-color: #3c8dbc;color:white">
+            <h3 class="panel-title">Update Initiative  <i class="close fa fa-window-close" style="float:right"></i></h3>
+
+        </div>
+
+        <div class="panel-body" style="max-height:400px;overflow-y:scroll">
+            <div class="form-group" style="padding: 20px 10px 20px 10px;">
+                <label class="sr-only"> Input Initiative</label>
+                <input type="text" class="form-control" id="input-update-initiative-title" placeholder="Initiative Title" style="margin:auto;" disabled />
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="control-label">Work Group Responsibility :</label>
+                <select class="form-control" id="input-update-initiative-wgr">
+                    <option value="">select user</option>
+                    <option value="#">user1</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-6">
+                <label class="control-label">Core Group Responsibility :</label>
+                <select class="form-control" id="input-update-initiative-cgr">
+                    <option value="">select user</option>
+                    <option value="#">user1</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Projected DOC</label>
+                <input type="text" class="form-control" id="input-update-initiative-pdoc" placeholder="">
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Projected Net Revenue</label>
+                <input type="text" class="form-control" id="input-update-initiative-pnr" placeholder="">
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label">Initiative Not Carried Through and Why</label>
+                <input type="text" class="form-control" id="input-update-initiative-inctaw" placeholder="">
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Projected Contribution</label>
+                <input type="text" class="form-control" id="input-update-initiative-pc" placeholder="">
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Expected Achieved contribution</label>
+                <input type="text" class="form-control" id="input-update-initiative-eac" placeholder="">
+            </div>
+            <div class="form-group col-sm-5">
+                <label class="control-label">Achieved contribution</label>
+                <input type="text" class="form-control" id="input-update-initiative-ac" placeholder="">
+            </div>
+            <div class="form-group col-sm-2">
+                <label class="control-label">GAP</label>
+                <input type="text" class="form-control" id="input-update-initiative-gap" placeholder="">
+            </div>
+
+        </div>
+        <div class="panel-footer" style="padding:5px 25px 5px 5px;">
+            <div class="col-sm-offset-11">
+                <button type="submit" id="btn-update-initiative" class="btn btn-primary">Update</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@*Update Tasks*@
+<div id="prompt-update-task" class="modal">
+    <div class="modal-content panel" style="border-radius: 10px; width:50%;border-color:#3c8dbc">
+
+        <div class="panel-heading" style="background-color: #3c8dbc;color:white">
+            <h3 class="panel-title">Input Initiative  <i class="close fa fa-window-close" style="float:right"></i></h3>
+
+        </div>
+        <div class="panel-body" style="max-height:400px;overflow-y:scroll">
+            <div class="form-group" style="padding: 20px 10px 20px 10px;">
+                <label class="sr-only"> Input Task Name</label>
+                <input type="text" class="form-control" id="input-update-task-title" placeholder="Task Title" style="width:100%;margin:auto;" />
+            </div>
+            <div class="form-group col-sm-4">
+                <label class="control-label">Due Date :</label>
+                <input type="text" class="form-control" id="input-update-task-duedate" placeholder="Select Date" readonly>
+            </div>
+            <div class="form-group col-sm-4">
+                <label class="control-label">Assign To :</label>
+                <select class="form-control" id="input-update-task-assignedto">
+                    <option value="">--select user--</option>
+                    <option value="SP7403">Gihan Akalanka</option>
+                    <option value="SP7401">Nayon Fonseka</option>
+                </select>
+            </div>
+            <div class="form-group col-sm-3">
+                <label class="control-label">Status :</label>
+                <input type="checkbox" data-toggle="toggle" data-on="Open" data-off="Close">
+            </div>
+        </div>
+        <div class="panel-footer" style="padding:5px;">
+            <div class="col-sm-offset-10">
+                <button type="submit" class="btn btn-primary" id="btn-update-task">Update Task</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Scripts/Tree/TreeView.js"></script>
+
