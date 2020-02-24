@@ -14,6 +14,10 @@ namespace TTS.Business
         {
             return taskDL.AddTask(task);
         }
+        public bool UpdateTask(Task task)
+        {
+            return taskDL.UpdateTask(task);
+        }
 
         public List<Task> GetTasks()
         {

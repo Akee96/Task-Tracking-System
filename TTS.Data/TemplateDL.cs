@@ -40,6 +40,39 @@ namespace TTS.Data
             return Data.SqlSpExecute("sp_InsertInitiative", injector);
         }
 
+        public bool UpdateTemplateDetails(Template template, Inititiative inititiative)
+        {
+            bool isSuccess;
+
+            try
+            {
+                Func<SqlCommand, bool> injector = cmd =>
+                {
+                    cmd.Parameters.Add("@InitiativeRecordId", SqlDbType.Int).Value = template.Id;
+                    cmd.Parameters.Add("@WorkGroupResponsibility", SqlDbType.VarChar).Value = inititiative.WorkGroupResponsibility;
+                    cmd.Parameters.Add("@CoreGroupResponsibility", SqlDbType.VarChar).Value = inititiative.CoreGroupResponsibility;
+                    cmd.Parameters.Add("@InitiativeWhyNotCarried", SqlDbType.VarChar).Value = inititiative.InitiativeWhyNotCarried;
+                    cmd.Parameters.Add("@ProjectedDOC", SqlDbType.VarChar).Value = inititiative.ProjectedDOC;
+                    cmd.Parameters.Add("@ProjectedNetRevenue", SqlDbType.VarChar).Value = inititiative.ProjectedNetRevenue;
+                    cmd.Parameters.Add("@ProjectedContribution", SqlDbType.VarChar).Value = inititiative.ProjectedContribution;
+                    cmd.Parameters.Add("@AchievedContribution", SqlDbType.VarChar).Value = inititiative.AchievedContribution;
+                    cmd.Parameters.Add("@ExpectedAchievedContribution", SqlDbType.VarChar).Value = inititiative.ExpectedAchievedContribution;
+                    cmd.Parameters.Add("@GAP", SqlDbType.VarChar).Value = inititiative.GAP;
+
+                    cmd.ExecuteReader();
+
+                    return true;
+                };
+                return Data.SqlSpExecute("sp_Update_Initiative", injector);
+            }
+            catch (Exception ex)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
+        }
+
         public List<Template> GetTemplateDetailsByName(Group group)
         {
             Func<SqlCommand, List<Template>> injector = cmd =>

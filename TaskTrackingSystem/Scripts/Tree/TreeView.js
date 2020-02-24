@@ -63,6 +63,41 @@ $("#btn-add-task").click(function () {
     }
 });
 
+//$("#btn-update-initiative").click(function () {
+//    if (ValidateInitiativeUpdates()) {
+//        var wgr = $("#input-update-initiative-wgr").val(),
+//            cgr = $("#input-update-initiative-cgr").val(),
+//            pdoc = $("#input-update-initiative-pdoc").val(),
+//            pnr = $("#input-update-initiative-pnr").val(),
+//            inctaw = $("#input-update-initiative-inctaw").val(),
+//            pc = $("#input-update-initiative-pc").val(),
+//            eac = $("#input-update-initiative-eac").val(),
+//            ac = $("#input-update-initiative-ac").val(),
+//            gap = $("#input-update-initiative-gap").val()
+//        UpdateInitiative(trid, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
+//        inst.edit(obj);
+//    }
+//});
+
+//$("#btn-update-task").click(function () {
+//    if (ValidateTaskUpdates()) {
+//        var duedate = $("#input-update-task-duedate").val(),
+//            assignedto = $("#input-update-task-assignedto").val(),
+//            status = $("#input-update-task-status").checked;
+//        if (status) {
+//            status = 1;
+//        }
+//        else {
+//            status = 2;
+//        }
+
+//        UpdateTask(id, duedate, assignedto, status);
+//        inst.edit(obj);
+//        ClearHideTaskUpdate();
+//        $("#btn-Update-task").hide();
+//    }
+//});
+
 $("#search-user").click(function () {
     var userid = $("#input-add-task-assignedto").val();
     var data = GetADUserNameById(userid);
@@ -165,15 +200,30 @@ $('#jstree').jstree({
                     "label": "Update",
                     "action": function (data) {
                         var inst = $.jstree.reference(data.reference),
-                            obj = inst.get_node(data.reference);
+                            obj = inst.get_node(data.reference),
+                            id = obj.id.substring(1);
+                        trid = obj.original.templateId;
+
                         if (obj.id.substring(0, 1) == "G") {
                             if (obj.original.templateName != "") {
-
+                                $("#input-update-initiative-title").val(obj.original.text);
+                                GetTemplateDetailsForUpdate(trid);
                                 $("#prompt-update-initiative").show();
                                 $("#btn-update-initiative").click(function () {
                                     if (ValidateInitiativeUpdates()) {
+                                        var wgr = $("#input-update-initiative-wgr").val(),
+                                            cgr = $("#input-update-initiative-cgr").val(),
+                                            pdoc = $("#input-update-initiative-pdoc").val(),
+                                            pnr = $("#input-update-initiative-pnr").val(),
+                                            inctaw = $("#input-update-initiative-inctaw").val(),
+                                            pc = $("#input-update-initiative-pc").val(),
+                                            eac = $("#input-update-initiative-eac").val(),
+                                            ac = $("#input-update-initiative-ac").val(),
+                                            gap = $("#input-update-initiative-gap").val()
+                                        UpdateInitiative(trid, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
                                         inst.edit(obj);
-                                        alert("hi");
+                                        ClearHideInitiativeUpdate();
+                                       
                                     }
                                 });
                             }
@@ -181,17 +231,27 @@ $('#jstree').jstree({
                         }
                         else {
                             $("#input-update-task-title").val(obj.original.text);
-                            $("#input-update-task-duedate").val(obj.data.duedate);
-                            $("#input-update-task-duedate").val(obj.data.assignedto);
+                            $("#input-update-task-duedate").val(obj.data.due_Date);
+                            $("#input-update-task-assignedto").val(obj.data.assignedTo);
                             $("#prompt-update-task").show();
                             $("#btn-update-task").click(function () {
                                 if (ValidateTaskUpdates()) {
+                                    var duedate = $("#input-update-task-duedate").val(),
+                                        assignedto = $("#input-update-task-assignedto").val(),
+                                        status = $("#input-update-task-status").checked;
+                                    if (status) {
+                                        status = 1;
+                                    }
+                                    else {
+                                        status = 2;
+                                    }
+
+                                    UpdateTask(id, duedate, assignedto, status);
                                     inst.edit(obj);
-                                    alert("hi");
+                                    ClearHideTaskUpdate();
                                 }
                             });
                         }
-
                     }
                 },
             }
@@ -427,6 +487,70 @@ function AddTask(isRoutTask, inst, obj, parentid, title, duedate, assignedto) {
     });
 }
 
+//Update Task
+function UpdateTask(id, duedate, assignedto, statusid) {
+    var status = {
+        Id: statusid
+    };
+    var task = {
+        ID: id,
+        Duedate: duedate,
+        AssignTo: assignedto,
+        Status: status
+    };
+
+    $.ajax({
+        url: "../Task/UpdateTask",
+        type: "POST",
+        datatype: "json",
+        data: task
+    }).done(function (data) {
+        if (data) {
+            //inst.create_node(obj, {}, "last", function (new_node) {
+            //    inst.edit(new_node);
+            $("#jstree").jstree(true).refresh();
+            refresh = true;
+
+            //});
+        }
+    });
+}
+
+//Update Initiative
+function UpdateInitiative(id, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap) {
+    var template = {
+        Id: id,
+        Name: "TTS.TMPL.Initiatives"
+    };
+
+    var inititiative = {
+        WorkGroupResponsibility: wgr,
+        CoreGroupResponsibility: cgr,
+        ProjectedDOC: pdoc,
+        ProjectedNetRevenue: pnr,
+        InitiativeWhyNotCarried: inctaw,
+        ProjectedContribution: pc,
+        ExpectedAchievedContribution: eac,
+        AchievedContribution: ac,
+        GAP: gap
+    };
+
+    $.ajax({
+        url: "../Template/UpdateTemplateDetails",
+        type: "POST",
+        datatype: "json",
+        data: { template, inititiative }
+    }).done(function (data) {
+        if (data) {
+            //inst.create_node(obj, {}, "last", function (new_node) {
+            //    inst.edit(new_node);
+            $("#jstree").jstree(true).refresh();
+            refresh = true;
+            //});
+        }
+    });
+}
+
 //GetFunctions
 function GetTemplateDetails(selectedTemplateName, selectedTemplateId, selectedInitiativeName) {
     var Template = {
@@ -462,6 +586,33 @@ function GetTemplateDetails(selectedTemplateName, selectedTemplateId, selectedIn
     });
 }
 
+//Get Function For Update
+function GetTemplateDetailsForUpdate(selectedTemplateId) {
+    var Template = {
+        Name: "TTS.TMPL.Initiatives",
+        Id: selectedTemplateId
+    };
+    var group = {
+        Template: Template
+    };
+
+    $.ajax({
+        url: "../Template/GetTemplateDetailsByName",
+        type: "POST",
+        datatype: "json",
+        data: group
+    }).done(function (data) {
+        $("#input-update-initiative-wgr").val(data[1].Value),
+            $("#input-update-initiative-cgr").val(data[3].Value),
+            $("#input-update-initiative-pdoc").val(data[5].Value),
+            $("#input-update-initiative-pnr").val(data[4].Value),
+            $("#input-update-initiative-inctaw").val(data[2].Value),
+            $("#input-update-initiative-pc").val(data[6].Value),
+            $("#input-update-initiative-eac").val(data[7].Value),
+            $("#input-update-initiative-ac").val(data[8].Value),
+            $("#input-update-initiative-gap").val(data[9].Value)
+    });
+}
 
 //Hide & Clear Prompts
 function ClearHideTask() {
@@ -503,6 +654,37 @@ function ClearHideInitiative() {
     document.getElementById("input-add-initiative-eac").style.borderColor = "";
 }
 
+function ClearHideTaskUpdate() {
+    $("#prompt-update-task").hide();
+    $("#input-update-task-title").val('');
+    $("#input-update-task-duedate").val('');
+    $("#input-update-task-assignedto").val('');
+    //Remove validation add task
+    document.getElementById("input-update-task-duedate").style.borderColor = "";
+    document.getElementById("input-update-task-assignedto").style.borderColor = "";
+    document.getElementById("input-update-task-title").style.borderColor = "";
+}
+
+function ClearHideInitiativeUpdate() {
+    $("#prompt-update-initiative").hide();
+    $("#input-update-initiative-title").val('');
+    $("#input-update-initiative-wgr").val('');
+    $("#input-update-initiative-cgr").val('');
+    $("#input-update-initiative-pdoc").val('');
+    $("#input-update-initiative-pnr").val('');
+    $("#input-update-initiative-inctaw").val('');
+    $("#input-update-initiative-pc").val('');
+    $("#input-update-initiative-eac").val('');
+    $("#input-update-initiative-ac").val('');
+    $("#input-update-initiative-gap").val('');
+    //Remove validation add initiative
+    document.getElementById("input-update-initiative-title").style.borderColor = "";
+    document.getElementById("input-update-initiative-wgr").style.borderColor = "";
+    document.getElementById("input-update-initiative-cgr").style.borderColor = "";
+    document.getElementById("input-update-initiative-pdoc").style.borderColor = "";
+    document.getElementById("input-update-initiative-pnr").style.borderColor = "";
+    document.getElementById("input-update-initiative-eac").style.borderColor = "";
+}
 
 // Validate Add Task
 function ValidateTaskInputs() {
@@ -696,7 +878,7 @@ function ValidateInitiativeUpdates() {
         result4 = false;
     }
     var result5 = false;
-    if ($("#input-add-initiative-pnr").val() == "") {
+    if ($("#input-update-initiative-pnr").val() == "") {
         document.getElementById("input-update-initiative-pnr").style.borderColor = "red";
         result5 = false;
     }
