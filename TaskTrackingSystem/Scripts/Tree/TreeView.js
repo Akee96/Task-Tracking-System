@@ -4,7 +4,8 @@ var refresh;
 var getAssignedRefresh;
 var inst,
     obj,
-    parentid;
+    parentid,
+    trid;
 
 $(document).ready(function () {
     currentuserName = GetADUserNameById(currentUser);
@@ -63,40 +64,42 @@ $("#btn-add-task").click(function () {
     }
 });
 
-//$("#btn-update-initiative").click(function () {
-//    if (ValidateInitiativeUpdates()) {
-//        var wgr = $("#input-update-initiative-wgr").val(),
-//            cgr = $("#input-update-initiative-cgr").val(),
-//            pdoc = $("#input-update-initiative-pdoc").val(),
-//            pnr = $("#input-update-initiative-pnr").val(),
-//            inctaw = $("#input-update-initiative-inctaw").val(),
-//            pc = $("#input-update-initiative-pc").val(),
-//            eac = $("#input-update-initiative-eac").val(),
-//            ac = $("#input-update-initiative-ac").val(),
-//            gap = $("#input-update-initiative-gap").val()
-//        UpdateInitiative(trid, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
-//        inst.edit(obj);
-//    }
-//});
+//Update click functions
+$("#btn-update-initiative").click(function () {
+    if (ValidateInitiativeUpdates()) {
+        var wgr = $("#input-update-initiative-wgr").val(),
+            cgr = $("#input-update-initiative-cgr").val(),
+            pdoc = $("#input-update-initiative-pdoc").val(),
+            pnr = $("#input-update-initiative-pnr").val(),
+            inctaw = $("#input-update-initiative-inctaw").val(),
+            pc = $("#input-update-initiative-pc").val(),
+            eac = $("#input-update-initiative-eac").val(),
+            ac = $("#input-update-initiative-ac").val(),
+            gap = $("#input-update-initiative-gap").val()
+        UpdateInitiative(trid, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
+        //inst.edit(obj);
+        ClearHideInitiativeUpdate();
 
-//$("#btn-update-task").click(function () {
-//    if (ValidateTaskUpdates()) {
-//        var duedate = $("#input-update-task-duedate").val(),
-//            assignedto = $("#input-update-task-assignedto").val(),
-//            status = $("#input-update-task-status").checked;
-//        if (status) {
-//            status = 1;
-//        }
-//        else {
-//            status = 2;
-//        }
+    }
+});
 
-//        UpdateTask(id, duedate, assignedto, status);
-//        inst.edit(obj);
-//        ClearHideTaskUpdate();
-//        $("#btn-Update-task").hide();
-//    }
-//});
+$("#btn-update-task").click(function () {
+    if (ValidateTaskUpdates()) {
+        var duedate = $("#input-update-task-duedate").val(),
+            assignedto = $("#input-update-task-assignedto").val(),
+            status = $("#input-update-task-status").checked;
+        if (status) {
+            status = 1;
+        }
+        else {
+            status = 2;
+        }
+
+        UpdateTask(id, duedate, assignedto, status);
+        //inst.edit(obj);
+        ClearHideTaskUpdate();
+    }
+});
 
 $("#search-user").click(function () {
     var userid = $("#input-add-task-assignedto").val();
@@ -199,58 +202,28 @@ $('#jstree').jstree({
                     "_disabled": false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
                     "label": "Update",
                     "action": function (data) {
-                        var inst = $.jstree.reference(data.reference),
-                            obj = inst.get_node(data.reference),
-                            id = obj.id.substring(1);
+                        inst = $.jstree.reference(data.reference);
+                        obj = inst.get_node(data.reference);
+                        id = obj.id.substring(1);
                         trid = obj.original.templateId;
 
                         if (obj.id.substring(0, 1) == "G") {
                             if (obj.original.templateName != "") {
+                                ClearHideInitiativeUpdate();
                                 $("#input-update-initiative-title").val(obj.original.text);
                                 GetTemplateDetailsForUpdate(trid);
                                 $("#prompt-update-initiative").show();
-                                $("#btn-update-initiative").click(function () {
-                                    if (ValidateInitiativeUpdates()) {
-                                        var wgr = $("#input-update-initiative-wgr").val(),
-                                            cgr = $("#input-update-initiative-cgr").val(),
-                                            pdoc = $("#input-update-initiative-pdoc").val(),
-                                            pnr = $("#input-update-initiative-pnr").val(),
-                                            inctaw = $("#input-update-initiative-inctaw").val(),
-                                            pc = $("#input-update-initiative-pc").val(),
-                                            eac = $("#input-update-initiative-eac").val(),
-                                            ac = $("#input-update-initiative-ac").val(),
-                                            gap = $("#input-update-initiative-gap").val()
-                                        UpdateInitiative(trid, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
-                                        inst.edit(obj);
-                                        ClearHideInitiativeUpdate();
-                                       
-                                    }
-                                });
+
                             }
 
                         }
                         else {
+                            ClearHideTaskUpdate();
                             $("#input-update-task-title").val(obj.original.text);
                             $("#input-update-task-duedate").val(obj.data.due_Date);
                             $("#input-update-task-assignedto").val(obj.data.assignedTo);
                             $("#prompt-update-task").show();
-                            $("#btn-update-task").click(function () {
-                                if (ValidateTaskUpdates()) {
-                                    var duedate = $("#input-update-task-duedate").val(),
-                                        assignedto = $("#input-update-task-assignedto").val(),
-                                        status = $("#input-update-task-status").checked;
-                                    if (status) {
-                                        status = 1;
-                                    }
-                                    else {
-                                        status = 2;
-                                    }
 
-                                    UpdateTask(id, duedate, assignedto, status);
-                                    inst.edit(obj);
-                                    ClearHideTaskUpdate();
-                                }
-                            });
                         }
                     }
                 },
