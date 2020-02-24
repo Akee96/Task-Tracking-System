@@ -91,7 +91,7 @@ function TreeData() {
     var data = {
         url: "../Tree/GetTree",
         type: "GET",
-        data: null,
+        data: { currentUser },
         datatype: "json"
     };
     //if (getAssignedRefresh) {
@@ -113,8 +113,7 @@ $('#jstree').jstree({
     ],
     "core": {
 
-        'data': TreeData(),
-        "check_callback": true
+        'data': TreeData()
     },
     "contextmenu": {
         items: function (o, cb) { // Could be an object directly
@@ -260,7 +259,8 @@ $('#jstree').on("changed.jstree", function (e, data) {
 });
 
 $("#assinged-to-me").click(function () {
-    $('#jstree').jstree('search', "SP7403");
+    //$('#jstree').jstree('search', "SP7403");
+    //$('#jstree').jstree(true).searchColumn("SP7403");
     //getAssignedRefresh = true;
     //var data = {
     //    url: "../Tree/GetTree",

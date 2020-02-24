@@ -58,9 +58,9 @@ namespace TTS.Data
                             {
                                 Name = (rdr["TemplateName"]) == DBNull.Value ? "" : (rdr["TemplateName"]).ToString(),
                                 Id = (rdr["TemplateRecordId"]) == DBNull.Value ? 0 : Convert.ToInt32(rdr["TemplateRecordId"])
-                            }
+                            },
                             //IsActive = (bool)rdr["IsActive"],
-                            //CreatedUser = rdr["CreatedUser"].ToString(),
+                            //CreatedUser = rdr["CreatedUser"].ToString()
                             //CreatedDate = (DateTime)rdr["CreatedDate"]
                         };
                         groups.Add(group);
