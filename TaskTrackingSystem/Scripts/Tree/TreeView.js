@@ -109,7 +109,7 @@ function TreeData() {
 
 $('#jstree').jstree({
     "plugins": [
-        "table", "contextmenu"
+        "table", "contextmenu", "search"
     ],
     "core": {
 
@@ -200,7 +200,17 @@ $('#jstree').jstree({
             return items;
         }
     },
-
+    search: {
+        show_only_matches: true,
+        "fuzzy": true,
+        "search_leaves_only": false,
+        search_callback: function (str, node) {
+            if (node.data != null) {
+                if (node.data.assignedTo === str) { return true; }
+            }
+            
+        }
+    },
     table: {
         columns: [
             { width: "500", header: "Title", headerClass: "customheaderclass0" },
@@ -250,6 +260,7 @@ $('#jstree').on("changed.jstree", function (e, data) {
 });
 
 $("#assinged-to-me").click(function () {
+    $('#jstree').jstree('search', "SP7403");
     //getAssignedRefresh = true;
     //var data = {
     //    url: "../Tree/GetTree",
@@ -268,6 +279,8 @@ $(".close").click(function () {
     $("#prompt-add-task").hide();
     $("#prompt-update-initiative").hide();
     $("#prompt-update-task").hide();
+    $("#btn-add-task-rout").hide();
+    $("#btn-add-task").hide();
 
     //Remove validation add group
     document.getElementById("input-add-group-title").style.borderColor = "";
