@@ -39,6 +39,36 @@ namespace TTS.Data
             return isSuccess;
         }
 
+        public bool UpdateTask(Task task)
+        {
+            bool isSuccess;
+
+            try
+            {
+                Func<SqlCommand, bool> injector = cmd =>
+                {
+                    cmd.Parameters.Add("@TaskId", SqlDbType.VarChar).Value = task.Id;
+                    //cmd.Parameters.Add("@GroupId", SqlDbType.Int).Value = task.Group.Id;
+                    //cmd.Parameters.Add("@ParentId", SqlDbType.Int).Value = task.ParentId;
+                    cmd.Parameters.Add("@DueDate", SqlDbType.DateTime).Value = task.DueDate;
+                    cmd.Parameters.Add("@AssignTo", SqlDbType.VarChar).Value = task.AssignTo;
+                    cmd.Parameters.Add("@StatusId", SqlDbType.VarChar).Value = task.Status.Id;
+                    //cmd.Parameters.Add("@IsActive", SqlDbType.Bit).Value = task.IsActive;
+
+                    cmd.ExecuteReader();
+
+                    return true;
+                };
+                return Data.SqlSpExecute("sp_Update_Task", injector);
+            }
+            catch (Exception ex)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
+        }
+
         public List<Task> GetTasks()
         {
             Func<SqlCommand, List<Task>> injector = cmd =>

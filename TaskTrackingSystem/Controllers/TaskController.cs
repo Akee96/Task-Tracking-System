@@ -20,6 +20,10 @@ namespace TaskTrackingSystem.Controllers
         {
             return Json(taskBL.AddTask(task));
         }
+        public JsonResult UpdateTask(Task task)
+        {
+            return Json(taskBL.UpdateTask(task));
+        }
 
         public List<Task> GetTasks()
         {

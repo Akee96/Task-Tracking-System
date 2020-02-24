@@ -16,6 +16,11 @@ namespace TaskTrackingSystem.Controllers
             return templateBL.AddTemplateDetails(inititiative);
         }
 
+        public JsonResult UpdateTemplateDetails(Template template, Inititiative inititiative)
+        {
+            return Json(templateBL.UpdateTemplateDetails(template, inititiative));
+        }
+
         [HttpPost]
         public JsonResult GetTemplateDetailsByName(Group group)
         {

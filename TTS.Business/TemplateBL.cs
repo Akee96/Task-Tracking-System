@@ -16,6 +16,11 @@ namespace TTS.Business
             return templateDL.AddTemplateDetails(inititiative);
         }
 
+        public bool UpdateTemplateDetails(Template template, Inititiative inititiative)
+        {
+            return templateDL.UpdateTemplateDetails(template, inititiative);
+        }
+
         public List<Template> GetTemplateDetailsByName(Group group)
         {
             return templateDL.GetTemplateDetailsByName(group);
