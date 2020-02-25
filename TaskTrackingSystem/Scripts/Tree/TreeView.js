@@ -1,115 +1,244 @@
 ﻿var currentUser = commonStrings.CurrentUser;
 var currentuserName;
-var refresh;
+var isRefresh;
 var getAssignedRefresh;
-var inst,
-    obj,
-    parentid,
-    trid;
+var isAssignedToUser,
+    isChangedAssingedUser;
+var instForAddNew,
+    objForAddNew,
+    parentIdForAddNew,
+    instForUpdate,
+    objForUpdate,
+    idForUpdate,
+    tridForUpdate;
 
 $(document).ready(function () {
     currentuserName = GetADUserNameById(currentUser);
     document.getElementById('user-account-name').innerHTML = currentuserName;
 });
 
+//Date picker Function
+$(function () {
+    $("#input-add-task-duedate").datepicker();
+    $("#input-update-task-duedate").datepicker();
+});
 
 
+//Add click function
 $("#btn-add-task-rout").click(function () {
-    if (ValidateTaskInputs()) {
-        var title = $("#input-add-task-title").val(),
-            duedate = $("#input-add-task-duedate").val(),
-            assignedto = $("#search-result-user-id").val();
+    if (ValidateInitiativeUpdates()) {
+        if (isAssignedToUser) {
+            var title = $("#input-add-task-title").val(),
+                duedate = $("#input-add-task-duedate").val(),
+                assignedto = $("#assignedTo-search-result-user-id").val();
 
-        isRoutTask = true;
-        AddTask(isRoutTask, inst, obj, parentid, title, duedate, assignedto);
-        ClearHideTask();
-        $("#btn-add-task-rout").hide();
+            isRoutTask = true;
+            AddTask(isRoutTask, instForAddNew, objForAddNew, parentIdForAddNew, title, duedate, assignedto);
+            ClearHideTask();
+            $("#btn-add-task-rout").hide();
+            isAssignedToUser = false;
+        }
+        else {
+            alert("Please SEARCH persons you want assigne task !!!");
+        }
     }
 });
 
 $("#btn-add-initiative").click(function () {
-    if (ValidateInitiativeInputs()) {
-        var title = $("#input-add-initiative-title").val(),
-            wgr = $("#input-add-initiative-wgr").val(),
-            cgr = $("#input-add-initiative-cgr").val(),
-            pdoc = $("#input-add-initiative-pdoc").val(),
-            pnr = $("#input-add-initiative-pnr").val(),
-            inctaw = $("#input-add-initiative-inctaw").val(),
-            pc = $("#input-add-initiative-pc").val(),
-            eac = $("#input-add-initiative-eac").val(),
-            ac = $("#input-add-initiative-ac").val(),
-            gap = $("#input-add-initiative-gap").val()
-        AddInitiative(inst, obj, parentid, title, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
-        ClearHideInitiative();
+    if (ValidateInitiativeUpdates()) {
+        if (isAssignedToUser) {
+            var title = $("#input-add-initiative-title").val(),
+                wgr = $("#wgr-search-result-user-id").val(),
+                cgr = $("#cgr-search-result-user-id").val(),
+                pdoc = $("#input-add-initiative-pdoc").val(),
+                pnr = $("#input-add-initiative-pnr").val(),
+                inctaw = $("#input-add-initiative-inctaw").val(),
+                pc = $("#input-add-initiative-pc").val(),
+                eac = $("#input-add-initiative-eac").val(),
+                ac = $("#input-add-initiative-ac").val(),
+                gap = $("#input-add-initiative-gap").val()
+            AddInitiative(instForAddNew, objForAddNew, parentIdForAddNew, title, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
+            ClearHideInitiative();
+            isAssignedToUser = false;
+        }
+        else {
+            alert("Please SEARCH persons you want assigne responsibility !!!");
+        }
     }
 });
 
 $("#btn-add-group").click(function () {
     if (ValidateGroupInputs()) {
         var title = $("#input-add-group-title").val();
-        AddGroup(inst, obj, parentid, title);
+        AddGroup(instForAddNew, objForAddNew, parentIdForAddNew, title);
         ClearHideGroup();
     }
 });
 
 $("#btn-add-task").click(function () {
-    if (ValidateTaskInputs()) {
-        var title = $("#input-add-task-title").val(),
-            duedate = $("#input-add-task-duedate").val(),
-            assignedto = $("#search-result-user-id").val();
-        isRoutTask = false;
-        AddTask(isRoutTask, inst, obj, parentid, title, duedate, assignedto);
-        ClearHideTask();
-        $("#btn-add-task").hide();
+    if (ValidateInitiativeUpdates()) {
+        if (isAssignedToUser) {
+            var title = $("#input-add-task-title").val(),
+                duedate = $("#input-add-task-duedate").val(),
+                assignedto = $("#assignedTo-search-result-user-id").val();
+            isRoutTask = false;
+            AddTask(isRoutTask, instForAddNew, objForAddNew, parentIdForAddNew, title, duedate, assignedto);
+            ClearHideTask();
+            $("#btn-add-task").hide();
+            isAssignedToUser = false;
+        }
+        else {
+            alert("Please SEARCH persons you want assigne task !!!");
+        }
     }
 });
 
+
 //Update click functions
 $("#btn-update-initiative").click(function () {
+    if (isAssignedToUser) {
+        if (isChangedAssingedUser) {
+            isAssignedToUser = false;
+            isChangedAssingedUser = false;
+        }
+        else {
+            isAssignedToUser = true;
+        }
+    }
     if (ValidateInitiativeUpdates()) {
-        var wgr = $("#input-update-initiative-wgr").val(),
-            cgr = $("#input-update-initiative-cgr").val(),
-            pdoc = $("#input-update-initiative-pdoc").val(),
-            pnr = $("#input-update-initiative-pnr").val(),
-            inctaw = $("#input-update-initiative-inctaw").val(),
-            pc = $("#input-update-initiative-pc").val(),
-            eac = $("#input-update-initiative-eac").val(),
-            ac = $("#input-update-initiative-ac").val(),
-            gap = $("#input-update-initiative-gap").val()
-        UpdateInitiative(trid, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
-        //inst.edit(obj);
-        ClearHideInitiativeUpdate();
-
+        if (isAssignedToUser) {
+            var wgr = $("#wgr-search-result-user-id").val(),
+                cgr = $("#cgr-search-result-user-id").val(),
+                pdoc = $("#input-update-initiative-pdoc").val(),
+                pnr = $("#input-update-initiative-pnr").val(),
+                inctaw = $("#input-update-initiative-inctaw").val(),
+                pc = $("#input-update-initiative-pc").val(),
+                eac = $("#input-update-initiative-eac").val(),
+                ac = $("#input-update-initiative-ac").val(),
+                gap = $("#input-update-initiative-gap").val()
+            UpdateInitiative(instForUpdate, objForUpdate, tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
+            ClearHideInitiativeUpdate();
+            isAssignedToUser = false;
+        }
+        else {
+            alert("Please SEARCH persons you want assigne responsibility !!!");
+        }
     }
 });
 
 $("#btn-update-task").click(function () {
-    if (ValidateTaskUpdates()) {
-        var duedate = $("#input-update-task-duedate").val(),
-            assignedto = $("#input-update-task-assignedto").val(),
-            status = $("#input-update-task-status").checked;
-        if (status) {
-            status = 1;
+    if (isAssignedToUser) {
+        if (isChangedAssingedUser) {
+            isAssignedToUser = false;
+            isChangedAssingedUser = false;
         }
         else {
-            status = 2;
+            isAssignedToUser = true;
         }
+    }
 
-        UpdateTask(id, duedate, assignedto, status);
-        //inst.edit(obj);
-        ClearHideTaskUpdate();
+    if (ValidateInitiativeUpdates()) {
+        if (isAssignedToUser) {
+            var duedate = $("#input-update-task-duedate").val(),
+                assignedto = $("#assignedTo-search-result-user-id").val(),
+                status;
+            if ($("#input-update-task-status").is(':checked')) {
+                status = 1;
+            } else {
+                status = 2;
+            }
+            UpdateTask(instForUpdate, objForUpdate, idForUpdate, duedate, assignedto, status);
+            ClearHideTaskUpdate();
+            isAssignedToUser = false;
+        }
+        else {
+            alert("Please SEARCH persons you want assigne task !!!");
+        }
     }
 });
 
-$("#search-user").click(function () {
+
+//Search users click functions
+$("#btn-add-task-assignedto-search-user").click(function () {
     var userid = $("#input-add-task-assignedto").val();
     var data = GetADUserNameById(userid);
     if (data) {
+        isAssignedToUser = true;
         $("#input-add-task-assignedto").val(data);
-        $("#search-result-user-id").val(userid);
+        $("#assignedTo-search-result-user-id").val(userid);
+    }
+    else {
+        alert("No such user in AD. Please try again !!!")
     }
 });
 
+$("#btn-add-initiative-wgr-search-user").click(function () {
+    var userid = $("#input-add-task-wgr").val();
+    var data = GetADUserNameById(userid);
+    if (data) {
+        isAssignedToUser = true;
+        $("#input-add-task-wgr").val(data);
+        $("#wgr-search-result-user-id").val(userid);
+    }
+    else {
+        alert("No such user in AD. Please try again !!!")
+    }
+});
+
+$("#btn-add-initiative-cgr-search-user").click(function () {
+    var userid = $("#input-add-task-cgr").val();
+    var data = GetADUserNameById(userid);
+    if (data) {
+        isAssignedToUser = true;
+        $("#input-add-task-cgr").val(data);
+        $("#cgr-search-result-user-id").val(userid);
+    }
+    else {
+        alert("No such user in AD. Please try again !!!")
+    }
+});
+
+$("#btn-update-initiative-wgr-search-user").click(function () {
+    var userid = $("#input-update-initiative-wgr").val();
+    var data = GetADUserNameById(userid);
+    if (data) {
+        isAssignedToUser = true;
+        $("#input-update-initiative-wgr").val(data);
+        $("#wgr-search-result-user-id").val(userid);
+    }
+    else {
+        alert("No such user in AD. Please try again !!!")
+    }
+});
+
+$("#btn-update-initiative-cgr-search-user").click(function () {
+    var userid = $("#input-update-initiative-cgr").val();
+    var data = GetADUserNameById(userid);
+    if (data) {
+        isAssignedToUser = true;
+        $("#input-update-initiative-cgr").val(data);
+        $("#cgr-search-result-user-id").val(userid);
+    }
+    else {
+        alert("No such user in AD. Please try again !!!")
+    }
+});
+
+$("#btn-update-task-assignedto-search-user").click(function () {
+    var userid = $("#input-update-task-title").val();
+    var data = GetADUserNameById(userid);
+    if (data) {
+        isAssignedToUser = true;
+        $("#input-update-task-title").val(data);
+        $("#assignedTo-search-result-user-id").val(userid);
+    }
+    else {
+        alert("No such user in AD. Please try again !!!")
+    }
+});
+
+
+//Get AD user name
 function GetADUserNameById(userid) {
     var result;
     $.ajax({
@@ -122,9 +251,12 @@ function GetADUserNameById(userid) {
             result = data;
         }
     });
+
     return result;
 }
 
+
+//Tree data
 function TreeData() {
     var data = {
         url: "../Tree/GetTree",
@@ -145,13 +277,15 @@ function TreeData() {
     return data;
 }
 
+//JS Tree
 $('#jstree').jstree({
     "plugins": [
-        "table", "contextmenu", "search"
+        "table", "contextmenu"
     ],
     "core": {
 
-        'data': TreeData()
+        'data': TreeData(),
+        "check_callback": true
     },
     "contextmenu": {
         items: function (o, cb) { // Could be an object directly
@@ -162,20 +296,20 @@ $('#jstree').jstree({
                     "_disabled": false, //(this.check("create_node", data.reference, {}, "last")),
                     "label": "Create",
                     "action": function (data) {
-                        inst = $.jstree.reference(data.reference);
-                        obj = inst.get_node(data.reference);
-                        parentid = obj.id.substring(1);
+                        instForAddNew = $.jstree.reference(data.reference);
+                        objForAddNew = instForAddNew.get_node(data.reference);
+                        parentIdForAddNew = objForAddNew.id.substring(1);
 
                         var isRoutTask;
-                        if (obj.id.substring(0, 1) == "G") {
-                            if (obj.original.templateName != "") {
+                        if (objForAddNew.id.substring(0, 1) == "G") {
+                            if (objForAddNew.original.templateName != "") {
                                 ClearHideTask();
                                 $("#btn-add-task-rout").show();
                                 $("#prompt-add-task").show();
 
                             }
                             else {
-                                if (obj.parent.substring(1) == 1) {
+                                if (objForAddNew.parent.substring(1) == 1) {
                                     ClearHideInitiative();
                                     $("#prompt-add-initiative").show();
 
@@ -198,20 +332,20 @@ $('#jstree').jstree({
                 },
                 "update": {
                     "separator_before": false,
-                    "separator_after": false,
+                    "separator_after": true,
                     "_disabled": false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
                     "label": "Update",
                     "action": function (data) {
-                        inst = $.jstree.reference(data.reference);
-                        obj = inst.get_node(data.reference);
-                        id = obj.id.substring(1);
-                        trid = obj.original.templateId;
+                        instForUpdate = $.jstree.reference(data.reference);
+                        objForUpdate = instForUpdate.get_node(data.reference);
+                        idForUpdate = objForUpdate.id.substring(1);
+                        tridForUpdate = objForUpdate.original.templateId;
 
-                        if (obj.id.substring(0, 1) == "G") {
-                            if (obj.original.templateName != "") {
+                        if (objForUpdate.id.substring(0, 1) == "G") {
+                            if (objForUpdate.original.templateName != "") {
                                 ClearHideInitiativeUpdate();
-                                $("#input-update-initiative-title").val(obj.original.text);
-                                GetTemplateDetailsForUpdate(trid);
+                                $("#input-update-initiative-title").val(objForUpdate.original.text);
+                                GetTemplateDetailsForUpdate(tridForUpdate);
                                 $("#prompt-update-initiative").show();
 
                             }
@@ -219,9 +353,10 @@ $('#jstree').jstree({
                         }
                         else {
                             ClearHideTaskUpdate();
-                            $("#input-update-task-title").val(obj.original.text);
-                            $("#input-update-task-duedate").val(obj.data.due_Date);
-                            $("#input-update-task-assignedto").val(obj.data.assignedTo);
+                            $("#input-update-task-title").val(objForUpdate.original.text);
+                            $("#input-update-task-duedate").val(objForUpdate.data.due_Date);
+                            $("#input-update-task-assignedto").val(objForUpdate.data.assignedTo);
+                            $("#assignedTo-search-result-user-id").val(objForUpdate.data.assignedTo);
                             $("#prompt-update-task").show();
 
                         }
@@ -230,17 +365,6 @@ $('#jstree').jstree({
             }
 
             return items;
-        }
-    },
-    search: {
-        show_only_matches: true,
-        "fuzzy": true,
-        "search_leaves_only": false,
-        search_callback: function (str, node) {
-            if (node.data != null) {
-                if (node.data.assignedTo === str) { return true; }
-            }
-            
         }
     },
     table: {
@@ -258,8 +382,8 @@ $('#jstree').jstree({
 });
 
 $('#jstree').on("changed.jstree", function (e, data) {
-    if (refresh) {
-        refresh = false;
+    if (isRefresh) {
+        isRefresh = false;
     }
     else if (getAssignedRefresh) {
         getAssignedRefresh = false;
@@ -291,6 +415,8 @@ $('#jstree').on("changed.jstree", function (e, data) {
     }
 });
 
+
+//Assigned to me click function
 $("#assinged-to-me").click(function () {
     //$('#jstree').jstree('search', "SP7403");
     //$('#jstree').jstree(true).searchColumn("SP7403");
@@ -304,6 +430,7 @@ $("#assinged-to-me").click(function () {
     //$("#jstree").jstree(true).settings.core.data = data;
     //$("#jstree").jstree(true).refresh();
 });
+
 
 //ClosePrompts
 $(".close").click(function () {
@@ -341,21 +468,16 @@ $(".close").click(function () {
 
 });
 
-//DateFunction
-$(function () {
-    $("#input-add-task-duedate").datepicker();
-    $("#input-update-task-duedate").datepicker();
-});
 
-//AddFunctions
-function AddGroup(inst, obj, parentid, title) {
+//Add Functions
+function AddGroup(instForAddNew, objForAddNew, parentIdForAddNew, title) {
 
     var Template = {
         Name: ""
     };
     var group = {
         Title: title,
-        ParentId: parentid,
+        ParentId: parentIdForAddNew,
         CreatedUser: currentUser,
         Template: Template
     };
@@ -368,22 +490,22 @@ function AddGroup(inst, obj, parentid, title) {
         data: { group, inititiative }
     }).done(function (data) {
         if (data) {
-            inst.create_node(obj, {}, "last", function (new_node) {
-                inst.edit(new_node);
+            instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
+                instForAddNew.edit(new_node);
                 $("#jstree").jstree(true).refresh();
-                refresh = true;
+                isRefresh = true;
             });
         }
     });
 }
 
-function AddInitiative(inst, obj, parentid, title, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap) {
+function AddInitiative(instForAddNew, objForAddNew, parentIdForAddNew, title, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap) {
     var Template = {
         Name: "TTS.TMPL.Initiatives"
     };
     var group = {
         Title: title,
-        ParentId: parentid,
+        ParentId: parentIdForAddNew,
         CreatedUser: currentUser,
         Template: Template
     };
@@ -406,19 +528,19 @@ function AddInitiative(inst, obj, parentid, title, wgr, cgr, pdoc, pnr, inctaw, 
         data: { group, inititiative }
     }).done(function (data) {
         if (data) {
-            inst.create_node(obj, {}, "last", function (new_node) {
-                inst.edit(new_node);
+            instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
+                instForAddNew.edit(new_node);
                 $("#jstree").jstree(true).refresh();
-                refresh = true;
+                isRefresh = true;
             });
         }
     });
 }
 
-function AddTask(isRoutTask, inst, obj, parentid, title, duedate, assignedto) {
+function AddTask(isRoutTask, instForAddNew, objForAddNew, parentIdForAddNew, title, duedate, assignedto) {
     if (isRoutTask) {
         var group = {
-            Id: parentid
+            Id: parentIdForAddNew
         };
         var task = {
             Title: title,
@@ -435,7 +557,7 @@ function AddTask(isRoutTask, inst, obj, parentid, title, duedate, assignedto) {
         };
         var task = {
             Title: title,
-            ParentId: parentid,
+            ParentId: parentIdForAddNew,
             CreatedUser: currentUser,
             Group: group,
             DueDate: duedate,
@@ -451,22 +573,23 @@ function AddTask(isRoutTask, inst, obj, parentid, title, duedate, assignedto) {
         data: task
     }).done(function (data) {
         if (data) {
-            inst.create_node(obj, {}, "last", function (new_node) {
-                inst.edit(new_node);
+            instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
+                instForAddNew.edit(new_node);
                 $("#jstree").jstree(true).refresh();
-                refresh = true;
+                isRefresh = true;
             });
         }
     });
 }
 
-//Update Task
-function UpdateTask(id, duedate, assignedto, statusid) {
+
+//Update Functions
+function UpdateTask(instForUpdate, objForUpdate, idForUpdate, duedate, assignedto, statusid) {
     var status = {
         Id: statusid
     };
     var task = {
-        ID: id,
+        ID: idForUpdate,
         Duedate: duedate,
         AssignTo: assignedto,
         Status: status
@@ -479,20 +602,18 @@ function UpdateTask(id, duedate, assignedto, statusid) {
         data: task
     }).done(function (data) {
         if (data) {
-            //inst.create_node(obj, {}, "last", function (new_node) {
-            //    inst.edit(new_node);
-            $("#jstree").jstree(true).refresh();
-            refresh = true;
-
-            //});
+            instForUpdate.create_node(objForUpdate, {}, "last", function (new_node) {
+                instForUpdate.edit(new_node);
+                $("#jstree").jstree(true).refresh();
+                isRefresh = true;
+            });
         }
     });
 }
 
-//Update Initiative
-function UpdateInitiative(id, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap) {
+function UpdateInitiative(instForUpdate, objForUpdate, tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap) {
     var template = {
-        Id: id,
+        Id: tridForUpdate,
         Name: "TTS.TMPL.Initiatives"
     };
 
@@ -515,16 +636,15 @@ function UpdateInitiative(id, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap) {
         data: { template, inititiative }
     }).done(function (data) {
         if (data) {
-            //inst.create_node(obj, {}, "last", function (new_node) {
-            //    inst.edit(new_node);
-            $("#jstree").jstree(true).refresh();
-            refresh = true;
-            //});
+            instForUpdate.create_node(objForUpdate, {}, "last", function (new_node) {
+                instForUpdate.edit(new_node);
+                $("#jstree").jstree(true).refresh();
+                isRefresh = true;
+            });
         }
     });
 }
 
-//GetFunctions
 function GetTemplateDetails(selectedTemplateName, selectedTemplateId, selectedInitiativeName) {
     var Template = {
         Name: selectedTemplateName,
@@ -559,6 +679,7 @@ function GetTemplateDetails(selectedTemplateName, selectedTemplateId, selectedIn
     });
 }
 
+
 //Get Function For Update
 function GetTemplateDetailsForUpdate(selectedTemplateId) {
     var Template = {
@@ -575,17 +696,24 @@ function GetTemplateDetailsForUpdate(selectedTemplateId) {
         datatype: "json",
         data: group
     }).done(function (data) {
-        $("#input-update-initiative-wgr").val(data[1].Value),
-            $("#input-update-initiative-cgr").val(data[3].Value),
-            $("#input-update-initiative-pdoc").val(data[5].Value),
-            $("#input-update-initiative-pnr").val(data[4].Value),
-            $("#input-update-initiative-inctaw").val(data[2].Value),
-            $("#input-update-initiative-pc").val(data[6].Value),
-            $("#input-update-initiative-eac").val(data[7].Value),
-            $("#input-update-initiative-ac").val(data[8].Value),
-            $("#input-update-initiative-gap").val(data[9].Value)
+        if (typeof data[1] != 'undefined') {
+            $("#input-update-initiative-wgr").val(data[1].Value);
+            $("#wgr-search-result-user-id").val(data[1].Value);
+        }
+        if (typeof data[3] != 'undefined') {
+            $("#input-update-initiative-cgr").val(data[3].Value);
+            $("#cgr-search-result-user-id").val(data[3].Value);
+        }
+        if (typeof data[5] != 'undefined') { $("#input-update-initiative-pdoc").val(data[5].Value); }
+        if (typeof data[4] != 'undefined') { $("#input-update-initiative-pnr").val(data[4].Value); }
+        if (typeof data[2] != 'undefined') { $("#input-update-initiative-inctaw").val(data[2].Value); }
+        if (typeof data[6] != 'undefined') { $("#input-update-initiative-pc").val(data[6].Value); }
+        if (typeof data[7] != 'undefined') { $("#input-update-initiative-eac").val(data[7].Value); }
+        if (typeof data[8] != 'undefined') { $("#input-update-initiative-ac").val(data[8].Value); }
+        if (typeof data[9] != 'undefined') { $("#input-update-initiative-gap").val(data[9].Value); }
     });
 }
+
 
 //Hide & Clear Prompts
 function ClearHideTask() {
@@ -659,6 +787,7 @@ function ClearHideInitiativeUpdate() {
     document.getElementById("input-update-initiative-eac").style.borderColor = "";
 }
 
+
 // Validate Add Task
 function ValidateTaskInputs() {
     var result1 = false;
@@ -701,14 +830,13 @@ $("#input-add-task-title").keypress(function () {
     document.getElementById("input-add-task-title").style.borderColor = "";
 });
 
-$("#input-add-task-assignedto").change(function () {
+$("#input-add-task-assignedto").keypress(function () {
     document.getElementById("input-add-task-assignedto").style.borderColor = "";
 });
 
 $("#input-add-task-duedate").change(function () {
     document.getElementById("input-add-task-duedate").style.borderColor = "";
 });
-
 
 
 // Validate Add Initiative
@@ -780,11 +908,11 @@ $("#input-add-initiative-title").keypress(function () {
     document.getElementById("input-add-initiative-title").style.borderColor = "";
 });
 
-$("#input-add-initiative-wgr").change(function () {
+$("#input-add-initiative-wgr").keypress(function () {
     document.getElementById("input-add-initiative-wgr").style.borderColor = "";
 });
 
-$("#input-add-initiative-cgr").change(function () {
+$("#input-add-initiative-cgr").keypress(function () {
     document.getElementById("input-add-initiative-cgr").style.borderColor = "";
 });
 
@@ -799,7 +927,6 @@ $("#input-add-initiative-pnr").keypress(function () {
 $("#input-add-initiative-eac").keypress(function () {
     document.getElementById("input-add-initiative-eac").style.borderColor = "";
 });
-
 
 
 // Validate Add Group
@@ -818,7 +945,6 @@ function ValidateGroupInputs() {
 $("#input-add-group-title").keypress(function () {
     document.getElementById("input-add-group-title").style.borderColor = "";
 });
-
 
 
 // Validate Update Initiative
@@ -877,11 +1003,13 @@ function ValidateInitiativeUpdates() {
     }
 }
 
-$("#input-update-initiative-wgr").change(function () {
+$("#input-update-initiative-wgr").keypress(function () {
+    isChangedAssingedUser = true;
     document.getElementById("input-update-initiative-wgr").style.borderColor = "";
 });
 
-$("#input-update-initiative-cgr").change(function () {
+$("#input-update-initiative-cgr").keypress(function () {
+    isChangedAssingedUser = true;
     document.getElementById("input-update-initiative-cgr").style.borderColor = "";
 });
 
@@ -896,7 +1024,6 @@ $("#input-update-initiative-pnr").keypress(function () {
 $("#input-update-initiative-eac").keypress(function () {
     document.getElementById("input-update-initiative-eac").style.borderColor = "";
 });
-
 
 
 //Validate Update tasks
@@ -945,7 +1072,8 @@ $("#input-update-task-duedate").change(function () {
     document.getElementById("input-update-task-duedate").style.borderColor = "";
 });
 
-$("#input-update-task-assignedto").change(function () {
+$("#input-update-task-assignedto").keypress(function () {
+    isChangedAssingedUser = true;
     document.getElementById("input-update-task-assignedto").style.borderColor = "";
 });
 

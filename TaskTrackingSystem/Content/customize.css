@@ -61,7 +61,7 @@
 }
 
 .customheaderclass4 {
-    width: 0px !important;
+    width: 10px !important;
     font-size: medium !important;
     background-color: #3c8dbc !important;
     color: white;
@@ -93,4 +93,8 @@
     margin: auto;
     /*padding: 5px;*/
     border: 1px solid #888;
+}
+
+.dateredclass {
+    color: red;
 }

@@ -52,7 +52,7 @@ namespace TTS.Data
                     //cmd.Parameters.Add("@ParentId", SqlDbType.Int).Value = task.ParentId;
                     cmd.Parameters.Add("@DueDate", SqlDbType.DateTime).Value = task.DueDate;
                     cmd.Parameters.Add("@AssignTo", SqlDbType.VarChar).Value = task.AssignTo;
-                    cmd.Parameters.Add("@StatusId", SqlDbType.VarChar).Value = task.Status.Id;
+                    cmd.Parameters.Add("@StatusId", SqlDbType.Int).Value = task.Status.Id;
                     //cmd.Parameters.Add("@IsActive", SqlDbType.Bit).Value = task.IsActive;
 
                     cmd.ExecuteReader();

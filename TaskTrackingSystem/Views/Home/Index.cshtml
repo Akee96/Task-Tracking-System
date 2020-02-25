@@ -42,6 +42,9 @@
 </div>
 
 @*< !--Modal content-- >*@
+<input id="assignedTo-search-result-user-id" style="display:none">
+<input id="cgr-search-result-user-id" style="display:none">
+<input id="wgr-search-result-user-id" style="display:none">
 
 @*Add Group*@
 <div id="prompt-add-group" class="modal">
@@ -86,10 +89,9 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <input class="form-control" id="input-add-task-assignedto" placeholder="Enter Staff No">
-                        <input id="search-result-user-id" style="display:none">
                     </div>
-                    <div class="col-lg-4"> 
-                        <button id="search-user" type="submit" class="btn btn-primary">Serch</button>
+                    <div class="col-lg-4">
+                        <button id="btn-add-task-assignedto-search-user" type="submit" class="btn btn-primary">Serch</button>
                     </div>
                 </div>
             </div>
@@ -119,19 +121,21 @@
             </div>
             <div class="form-group col-sm-6">
                 <label class="control-label">Work Group Responsibility :</label>
-                <select id="input-add-initiative-wgr" class="form-control">
-                    <option value="">--select user--</option>
-                    <option value="SP7403">Gihan Akalanka</option>
-                    <option value="SP7401">Nayon Fonseka</option>
-                </select>
+                <div class="col-lg-8">
+                    <input class="form-control" id="input-add-task-wgr" placeholder="Enter Staff No">
+                </div>
+                <div class="col-lg-4">
+                    <button id="btn-add-initiative-wgr-search-user" type="submit" class="btn btn-primary">Serch</button>
+                </div>
             </div>
             <div class="form-group col-sm-6">
                 <label class="control-label">Core Group Responsibility :</label>
-                <select id="input-add-initiative-cgr" class="form-control">
-                    <option value="">--select user--</option>
-                    <option value="SP7403">Gihan Akalanka</option>
-                    <option value="SP7401">Nayon Fonseka</option>
-                </select>
+                <div class="col-lg-8">
+                    <input class="form-control" id="input-add-task-cgr" placeholder="Enter Staff No">
+                </div>
+                <div class="col-lg-4">
+                    <button id="btn-add-initiative-cgr-search-user" type="submit" class="btn btn-primary">Serch</button>
+                </div>
             </div>
             <div class="form-group col-sm-5">
                 <label class="control-label">Projected DOC</label>
@@ -188,17 +192,21 @@
             </div>
             <div class="form-group col-sm-6">
                 <label class="control-label">Work Group Responsibility :</label>
-                <select class="form-control" id="input-update-initiative-wgr">
-                    <option value="">select user</option>
-                    <option value="#">user1</option>
-                </select>
+                <div class="col-lg-8">
+                    <input class="form-control" id="input-update-initiative-wgr" placeholder="Enter Staff No">
+                </div>
+                <div class="col-lg-4">
+                    <button id="btn-update-initiative-wgr-search-user" type="submit" class="btn btn-primary">Serch</button>
+                </div>
             </div>
             <div class="form-group col-sm-6">
                 <label class="control-label">Core Group Responsibility :</label>
-                <select class="form-control" id="input-update-initiative-cgr">
-                    <option value="">select user</option>
-                    <option value="#">user1</option>
-                </select>
+                <div class="col-lg-8">
+                    <input class="form-control" id="input-update-initiative-cgr" placeholder="Enter Staff No">
+                </div>
+                <div class="col-lg-4">
+                    <button id="btn-update-initiative-cgr-search-user" type="submit" class="btn btn-primary">Serch</button>
+                </div>
             </div>
             <div class="form-group col-sm-5">
                 <label class="control-label">Projected DOC</label>
@@ -252,7 +260,7 @@
         <div class="panel-body" style="max-height:400px;overflow-y:scroll">
             <div class="form-group" style="padding: 20px 10px 20px 10px;">
                 <label class="sr-only"> Input Task Name</label>
-                <input type="text" class="form-control" id="input-update-task-title" placeholder="Task Title" style="width:100%;margin:auto;" />
+                <input type="text" class="form-control" id="input-update-task-title" placeholder="Task Title" style="width:100%;margin:auto;" disabled />
             </div>
             <div class="form-group col-sm-4">
                 <label class="control-label">Due Date :</label>
@@ -265,16 +273,15 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <input class="form-control" id="input-update-task-assignedto" placeholder="Enter Staff No">
-                        <input id="search-result-user-id" style="display:none">
                     </div>
                     <div class="col-lg-4">
-                        <button id="search-user" type="submit" class="btn btn-primary">Search</button>
+                        <button id="btn-update-task-assignedto-search-user" type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </div>
             </div>
             <div class="form-group col-sm-3">
                 <label class="control-label">Status :</label>
-                <input type="checkbox" data-toggle="toggle" data-on="Open" data-off="Close">
+                <input type="checkbox" id="input-update-task-status" data-toggle="toggle" data-on="Open" data-off="Close">
             </div>
         </div>
         <div class="panel-footer" style="padding:5px;">
