@@ -61,7 +61,7 @@
 }
 
 .customheaderclass4 {
-    width: 0px !important;
+    width: 10px !important;
     font-size: medium !important;
     background-color: #3c8dbc !important;
     color: white;
@@ -70,6 +70,9 @@
 
 .testclass {
     padding: 1px;
+}
+.dateredclass {
+    color: red;
 }
 
 

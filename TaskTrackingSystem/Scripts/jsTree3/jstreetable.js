@@ -14,7 +14,7 @@
 /*jslint nomen:true */
 /*jshint unused:vars */
 /*global navigator, document, jQuery, define, localStorage */
-
+var isTTSStatusOpen;
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
@@ -130,6 +130,7 @@
         width: 'auto'
     };
 
+   
     $.jstree.plugins.table = function (options, parent) {
         var _this = this;
 
@@ -1098,7 +1099,34 @@
                     }
                     // need to make the height of this match the line height of the tree. How?
                     span = last.children("span");
+                    
+                    if (content == "Open") {
+                        valClass = "label label-success"
+                        isTTSStatusOpen = true;
+                    }
+                    else if (content == "Close") {
+                        valClass = "label label-default"
+                        isTTSStatusOpen = false;
+                    }
+                  
+                    // Date color red if expired
+                    if (isTTSStatusOpen) {
+                        if (content.charAt(2) == "/" || content.charAt(5) == "/") {
+                            contentdate = new Date(content);
+                            var todaydate = new Date();
+                            if (contentdate > todaydate) {
+                                valClass = "dateredclass";
+                                isTTSStatusOpen = false;
+                            }
+                            
 
+                        }
+                    }
+                
+                    if (content<100) {
+                        valClass = "badge";
+                    }    
+                
                     // create a span inside the div, so we can control what happens in the whole div versus inside just the text/background
                     span.addClass(cl + " " + valClass).html(content);
                     last = last.css(conf).addClass("jstree-table-cell jstree-table-cell-regular jstree-table-cell-root-" + rootid + " jstree-table-cell-" + classAdd + " " + wcl + " " + wideValClass + (tr ? " ui-state-default" : "")).addClass("jstree-table-col-" + i);

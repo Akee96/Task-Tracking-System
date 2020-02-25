@@ -96,7 +96,7 @@ namespace TaskTrackingSystem.Controllers
                         data = new JsTreeTableModel
                         {
                             assignedTo = item.AssignTo.ToString(),
-                            due_Date = (item.DueDate.ToString() == "1/1/0001 12:00:00 AM") ? "" : item.DueDate.ToString("dd/MM/yyyy"),
+                            due_Date = (item.DueDate.ToString() == "1/1/0001 12:00:00 AM") ? "" : item.DueDate.ToString("MM/dd/yyyy"),
                             status = item.Status.Name.ToString(),
                             exdended_date_count = item.ExtendedDateCount == 0 ? null : item.ExtendedDateCount.ToString()
                         }

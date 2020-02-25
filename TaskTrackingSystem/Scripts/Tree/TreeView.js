@@ -231,6 +231,7 @@ $('#jstree').jstree({
 
                         }
                         else {
+                            ClearHideTaskUpdate();
                             $("#input-update-task-title").val(obj.original.text);
                             $("#input-update-task-duedate").val(obj.data.due_Date);
                             $("#input-update-task-assignedto").val(obj.data.assignedTo);
@@ -321,6 +322,7 @@ $('#jstree').on("changed.jstree", function (e, data) {
 
 $("#assinged-to-me").click(function () {
     $('#jstree').jstree('search', "SP7403");
+    $(".jstree-icon").hide();
     //getAssignedRefresh = true;
     //var data = {
     //    url: "../Tree/GetTree",
@@ -728,7 +730,7 @@ $("#input-add-task-title").keypress(function () {
     document.getElementById("input-add-task-title").style.borderColor = "";
 });
 
-$("#input-add-task-assignedto").change(function () {
+$("#input-add-task-assignedto").keypress(function () {
     document.getElementById("input-add-task-assignedto").style.borderColor = "";
 });
 
@@ -972,7 +974,7 @@ $("#input-update-task-duedate").change(function () {
     document.getElementById("input-update-task-duedate").style.borderColor = "";
 });
 
-$("#input-update-task-assignedto").change(function () {
+$("#input-update-task-assignedto").keypress(function () {
     document.getElementById("input-update-task-assignedto").style.borderColor = "";
 });
 
