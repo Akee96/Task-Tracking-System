@@ -19,9 +19,9 @@ namespace TTS.Business
             return taskDL.UpdateTask(task);
         }
 
-        public List<Task> GetTasks()
+        public List<Task> GetTasks(string assignedUser)
         {
-            return taskDL.GetTasks();
+            return taskDL.GetTasks(assignedUser);
         }
     }
 }

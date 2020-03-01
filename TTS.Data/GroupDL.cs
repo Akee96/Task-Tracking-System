@@ -40,10 +40,12 @@ namespace TTS.Data
             return isSuccess;
         }
 
-        public List<Group> GetGroups()
+        public List<Group> GetGroups(int Id)
         {
             Func<SqlCommand, List<Group>> injector = cmd =>
             {
+                cmd.Parameters.Add("@Id", SqlDbType.Int).Value = Id;
+
                 List<Group> groups = new List<Group>();
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {

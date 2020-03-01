@@ -3,6 +3,11 @@
 
     string currentUser = currentUserServer;
     string currentUserId = currentUser.Substring(currentUserServer.LastIndexOf("\\", StringComparison.Ordinal) + 1).ToUpper();
+
+    if (currentUserId == "AKALANKA")
+    {
+        currentUserId = "SP7403";
+    }
 }
 
 
@@ -37,8 +42,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <!-- Google Font -->
-    <link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    @*<link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">*@
     <!-- Customize for Model -->
     @*<link href="~/Content/CustomizeModel.css" rel="stylesheet" />*@
 
@@ -57,7 +62,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="~/Scripts/jsTree3/jstree.js"></script>
     <script src="~/Scripts/bootstrap-treeview.min.js"></script>
     <link href="~/Content/bootstrap-treeview.min.css" rel="stylesheet" />
-
     <script src="~/Scripts/jsTree3/jstree.min.js"></script>
     <script src="~/Scripts/jsTree3/jstreetable.js"></script>
     <link href="~/Content/jsTree/themes/default/style.min.css" rel="stylesheet" />
@@ -65,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <script type="text/javascript">
         var commonStrings = {
-            CurrentUser: "@currentUserId"
+            CurrentUser: @currentUserId
         };
     </script>
 
@@ -97,7 +101,7 @@ desired effect
             <!-- Logo -->
             <a href="./index.html" class="logo">
                 <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>TM</b></span>
+                <span class="logo-mini"><b>TT</b></span>
                 <!-- logo for regular state and mobile devices -->
                 <span class="logo-lg"><b>Task Tracker</b></span>
             </a>
@@ -116,18 +120,16 @@ desired effect
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <!-- The user image in the navbar-->
                                 @*<img src="./components/adminLTE/img/user2-160x160.jpg" class="user-image" alt="User Image">*@
-                                <img src="~/AdminLTE/components/adminLTE/img/avatar5.png" class="user-image" alt="User Image"/>
+                                <img src="~/AdminLTE/components/adminLTE/img/avatar5.png" class="user-image" alt="User Image" />
                                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                                <span class="hidden-xs">@currentUserId</span>
+                                <span class="hidden-xs" id="user-account-name-navbar"></span>
                             </a>
                             <ul class="dropdown-menu">
                                 <!-- The user image in the menu -->
                                 <li class="user-header">
                                     <img src="~/AdminLTE/components/adminLTE/img/avatar5.png" class="img-circle" alt="User Image">
-                                    <p>
-                                        @currentUserId
-                                        <small id="user-account-name"></small>
-                                    </p>
+                                    <p id="user-account-name"> </p>
+                                    <p><small> @currentUserId </small></p>
                                 </li>
                                 <!-- Menu Body -->
                                 <!-- <li class="user-body">
@@ -166,8 +168,8 @@ desired effect
                 <!-- Sidebar Menu -->
                 <ul class="sidebar-menu" data-widget="tree">
                     <!-- Optionally, you can add icons to the links -->
-                    <li class="active" id="btn_input_values"><a href="#"><i class="fa fa-list-alt"></i> <span>All Tasks</span></a></li>
-                    <li><a href="#" id="assinged-to-me"><i class="fa fa-send"></i> <span>Assigned To Me</span><span class="label label-danger pull-right">1</span></a></li>
+                    <li class="active" id="btn-all-tasks"><a href="#"><i class="fa fa-list-alt"></i> <span>All Tasks</span></a></li>
+                    <li><a href="#" id="btn-assinged-to-me"><i class="fa fa-send"></i> <span>Assigned To Me</span>@*<span class="label label-danger pull-right"> </span>*@</a></li>
                     @*<li><a href="#"><i class="fa fa-sitemap"></i> <span>Groups</span></a></li>
                         <li><a href="#"><i class="fa fa-list-alt"></i> <span>Lists</span></a></li>
                         <li><a href="#"><i class="fa fa-asl-interpreting"></i> <span>Templates</span></a></li>

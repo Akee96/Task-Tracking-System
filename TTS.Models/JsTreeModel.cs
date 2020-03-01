@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TTS.Models
+﻿namespace TTS.Models
 {
     public class JsTreeModel
     {
@@ -30,5 +24,6 @@ namespace TTS.Models
         public string due_Date { get; set; }
         public string status { get; set; }
         public string exdended_date_count { get; set; }
+        public string username { get; set; }
     }
 }

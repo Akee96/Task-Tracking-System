@@ -16,9 +16,9 @@ namespace TTS.Business
             return groupDL.AddGroup(group);
         }
 
-        public List<Group> GetGroups()
+        public List<Group> GetGroups(int Id)
         {
-            return groupDL.GetGroups();
+            return groupDL.GetGroups(Id);
         }
     }
 }

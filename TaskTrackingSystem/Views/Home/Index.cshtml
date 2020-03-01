@@ -1,7 +1,5 @@
 ﻿@{
-    /**/
-
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home";
 }
 
 @*<div class="row">
@@ -43,6 +41,11 @@
 
 @*< !--Modal content-- >*@
 
+@*Hidden inputs*@
+<input id="assignedTo-search-result-user-id" style="display:none">
+<input id="cgr-search-result-user-id" style="display:none">
+<input id="wgr-search-result-user-id" style="display:none">
+
 @*Add Group*@
 <div id="prompt-add-group" class="modal">
     <div class="modal-content panel" style="border-radius: 10px; width:40%;border-color:#3c8dbc">
@@ -52,7 +55,7 @@
         <div class="panel-body">
             <div class="form-group" style="padding: 20px 0px 20px 10px;">
                 <label class="sr-only"> Title</label>
-                <input type="text" class="form-control" placeholder="Group Title" style="width:100%;margin:auto;" id="input-add-group-title" />
+                <input type="text" class="form-control" placeholder="Title" style="width:100%;margin:auto;" id="input-add-group-title" />
             </div>
         </div>
         <div class="panel-footer" style="padding:5px;">
@@ -73,23 +76,22 @@
         <div class="panel-body">
             <div class="form-group" style="padding: 20px 10px 20px 10px;">
                 <label class="sr-only"> Title</label>
-                <input type="text" id="input-add-task-title" class="form-control" placeholder="Task Title" style="width:100%;margin:auto;" />
+                <input type="text" id="input-add-task-title" class="form-control" placeholder="Title" style="width:100%;margin:auto;" />
             </div>
             <div class="form-group col-sm-6">
-                <label class="control-label">Due Date :</label>
+                <label class="control-label">Due Date </label>
                 <input type="text" class="form-control" id="input-add-task-duedate" placeholder="Select Date" readonly>
             </div>
             <div class="form-group col-sm-6">
                 <div class="row">
-                    <label class="control-label">Assign To :</label>
+                    <label class="control-label">Assign To </label>
                 </div>
                 <div class="row">
                     <div class="col-lg-8">
                         <input class="form-control" id="input-add-task-assignedto" placeholder="Enter Staff No">
-                        <input id="search-result-user-id" style="display:none">
                     </div>
-                    <div class="col-lg-4"> 
-                        <button id="search-user" type="submit" class="btn btn-primary">Serch</button>
+                    <div class="col-lg-4">
+                        <button id="btn-add-task-assignedto-search-user" type="submit" class="btn btn-primary">Serch</button>
                     </div>
                 </div>
             </div>
@@ -115,23 +117,25 @@
         <div class="panel-body" style="max-height:400px;overflow-y:scroll">
             <div class="form-group" style="padding: 20px 10px 20px 10px;">
                 <label class="sr-only"> Title</label>
-                <input type="text" id="input-add-initiative-title" class="form-control" placeholder="Initiative Title" style="width:100%;margin:auto;" />
+                <input type="text" id="input-add-initiative-title" class="form-control" placeholder="Title" style="width:100%;margin:auto;" />
             </div>
             <div class="form-group col-sm-6">
-                <label class="control-label">Work Group Responsibility :</label>
-                <select id="input-add-initiative-wgr" class="form-control">
-                    <option value="">--select user--</option>
-                    <option value="SP7403">Gihan Akalanka</option>
-                    <option value="SP7401">Nayon Fonseka</option>
-                </select>
+                <label class="control-label">Work Group Responsibility </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="input-add-initiative-wgr" placeholder="Enter Staff No">
+                </div>
+                <div class="col-lg-4">
+                    <button id="btn-add-initiative-wgr-search-user" type="submit" class="btn btn-primary">Serch</button>
+                </div>
             </div>
             <div class="form-group col-sm-6">
-                <label class="control-label">Core Group Responsibility :</label>
-                <select id="input-add-initiative-cgr" class="form-control">
-                    <option value="">--select user--</option>
-                    <option value="SP7403">Gihan Akalanka</option>
-                    <option value="SP7401">Nayon Fonseka</option>
-                </select>
+                <label class="control-label">Core Group Responsibility </label>
+                <div class="col-lg-8">
+                    <input class="form-control" id="input-add-initiative-cgr" placeholder="Enter Staff No">
+                </div>
+                <div class="col-lg-4">
+                    <button id="btn-add-initiative-cgr-search-user" type="submit" class="btn btn-primary">Serch</button>
+                </div>
             </div>
             <div class="form-group col-sm-5">
                 <label class="control-label">Projected DOC</label>
@@ -178,27 +182,43 @@
 
         <div class="panel-heading" style="background-color: #3c8dbc;color:white">
             <h3 class="panel-title">Update Initiative  <i class="close fa fa-window-close" style="float:right"></i></h3>
-
         </div>
-
         <div class="panel-body" style="max-height:400px;overflow-y:scroll">
             <div class="form-group" style="padding: 20px 10px 20px 10px;">
                 <label class="sr-only"> Input Initiative</label>
-                <input type="text" class="form-control" id="input-update-initiative-title" placeholder="Initiative Title" style="margin:auto;" disabled />
+                <input type="text" class="form-control" id="input-update-initiative-title" placeholder="Title" style="margin:auto;" disabled />
             </div>
             <div class="form-group col-sm-6">
-                <label class="control-label">Work Group Responsibility :</label>
-                <select class="form-control" id="input-update-initiative-wgr">
-                    <option value="">select user</option>
-                    <option value="#">user1</option>
-                </select>
+                <div class="row">
+                    <label class="control-label">Work Group Responsibility </label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7" style="padding-right:0px;">
+                        <input class="form-control" id="input-update-initiative-wgr" placeholder="Enter Staff No" disabled>
+                    </div>
+                    <div class="col-lg-1" style="padding-left:0px;">
+                        <button id="btn-update-initiative-wgr-edit-user" type="submit" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+                    </div>
+                    <div class="col-lg-3">
+                        <button id="btn-update-initiative-wgr-search-user" type="submit" class="btn btn-primary" disabled style="margin-left:15px;">Search</button>
+                    </div>
+                </div>
             </div>
             <div class="form-group col-sm-6">
-                <label class="control-label">Core Group Responsibility :</label>
-                <select class="form-control" id="input-update-initiative-cgr">
-                    <option value="">select user</option>
-                    <option value="#">user1</option>
-                </select>
+                <div class="row">
+                    <label class="control-label">Core Group Responsibility </label>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7" style="padding-right:0px;">
+                        <input class="form-control" id="input-update-initiative-cgr" placeholder="Enter Staff No" disabled>
+                    </div>
+                    <div class="col-lg-1" style="padding-left:0px;">
+                        <button id="btn-update-initiative-cgr-edit-user" type="submit" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+                    </div>
+                    <div class="col-lg-3">
+                        <button id="btn-update-initiative-cgr-search-user" type="submit" class="btn btn-primary" disabled style="margin-left:15px;">Search</button>
+                    </div>
+                </div>
             </div>
             <div class="form-group col-sm-5">
                 <label class="control-label">Projected DOC</label>
@@ -252,29 +272,31 @@
         <div class="panel-body" style="max-height:400px;overflow-y:scroll">
             <div class="form-group" style="padding: 20px 10px 20px 10px;">
                 <label class="sr-only"> Input Task Name</label>
-                <input type="text" class="form-control" id="input-update-task-title" placeholder="Task Title" style="width:100%;margin:auto;" />
+                <input type="text" class="form-control" id="input-update-task-title" placeholder="Title" style="width:100%;margin:auto;" disabled />
             </div>
             <div class="form-group col-sm-4">
-                <label class="control-label">Due Date :</label>
+                <label class="control-label">Due Date </label>
                 <input type="text" class="form-control" id="input-update-task-duedate" placeholder="Select Date" readonly>
             </div>
-            <div class="form-group col-sm-6">
+            <div class="form-group col-sm-8">
                 <div class="row">
-                    <label class="control-label">Assign To :</label>
+                    <label class="control-label">Assign To </label>
                 </div>
                 <div class="row">
-                    <div class="col-lg-8">
-                        <input class="form-control" id="input-update-task-assignedto" placeholder="Enter Staff No">
-                        <input id="search-result-user-id" style="display:none">
+                    <div class="col-lg-8" style="padding-right:0px;">
+                        <input class="form-control" id="input-update-task-assignedto" placeholder="Enter Staff No" disabled>
                     </div>
-                    <div class="col-lg-4">
-                        <button id="search-user" type="submit" class="btn btn-primary">Search</button>
+                    <div class="col-lg-1" style="padding-left:0px;">
+                        <button id="btn-update-task-assignedto-edit-user" type="submit" class="btn btn-primary"><i class="fa fa-pencil"></i></button>
+                    </div>
+                    <div class="col-lg-3">
+                        <button id="btn-update-task-assignedto-search-user" type="submit" class="btn btn-primary" disabled style="margin-left:15px;">Search</button>
                     </div>
                 </div>
             </div>
             <div class="form-group col-sm-3">
-                <label class="control-label">Status :</label>
-                <input type="checkbox" data-toggle="toggle" data-on="Open" data-off="Close">
+                <label class="control-label">Status </label>
+                <input type="checkbox" id="input-update-task-status" data-width="70" data-toggle="toggle" data-on="Open" data-off="Close">
             </div>
         </div>
         <div class="panel-footer" style="padding:5px;">
