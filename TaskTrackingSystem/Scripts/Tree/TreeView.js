@@ -2,8 +2,12 @@
 var currentuserName;
 var isRefresh;
 var getAssignedRefresh;
-var isAssignedToUser,
-    isChangedAssingedUser;
+var isAssignedToUserForTask,
+    isAssignedToUserForWgr,
+    isAssignedToUserForCgr,
+    isUpdateAssingedUserTask,
+    isUpdateAssingedUserWgr,
+    isUpdateAssingedUserCgr;
 var instForAddNew,
     objForAddNew,
     parentIdForAddNew,
@@ -15,6 +19,7 @@ var instForAddNew,
 $(document).ready(function () {
     currentuserName = GetADUserNameById(currentUser);
     document.getElementById('user-account-name').innerHTML = currentuserName;
+    document.getElementById('user-account-name-navbar').innerHTML = currentuserName;
 });
 
 //Date picker Function
@@ -26,8 +31,8 @@ $(function () {
 
 //Add click function
 $("#btn-add-task-rout").click(function () {
-    if (ValidateInitiativeUpdates()) {
-        if (isAssignedToUser) {
+    if (ValidateTaskInputs()) {
+        if (isAssignedToUserForTask) {
             var title = $("#input-add-task-title").val(),
                 duedate = $("#input-add-task-duedate").val(),
                 assignedto = $("#assignedTo-search-result-user-id").val();
@@ -36,17 +41,17 @@ $("#btn-add-task-rout").click(function () {
             AddTask(isRoutTask, instForAddNew, objForAddNew, parentIdForAddNew, title, duedate, assignedto);
             ClearHideTask();
             $("#btn-add-task-rout").hide();
-            isAssignedToUser = false;
+            isAssignedToUserForTask = false;
         }
         else {
-            alert("Please SEARCH persons you want assigne task !!!");
+            alert("Please SEARCH person you want assigne task !!!");
         }
     }
 });
 
 $("#btn-add-initiative").click(function () {
-    if (ValidateInitiativeUpdates()) {
-        if (isAssignedToUser) {
+    if (ValidateInitiativeInputs()) {
+        if (isAssignedToUserForWgr && isAssignedToUserForCgr) {
             var title = $("#input-add-initiative-title").val(),
                 wgr = $("#wgr-search-result-user-id").val(),
                 cgr = $("#cgr-search-result-user-id").val(),
@@ -56,10 +61,11 @@ $("#btn-add-initiative").click(function () {
                 pc = $("#input-add-initiative-pc").val(),
                 eac = $("#input-add-initiative-eac").val(),
                 ac = $("#input-add-initiative-ac").val(),
-                gap = $("#input-add-initiative-gap").val()
+                gap = $("#input-add-initiative-gap").val();
             AddInitiative(instForAddNew, objForAddNew, parentIdForAddNew, title, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
             ClearHideInitiative();
-            isAssignedToUser = false;
+            isAssignedToUserForWgr = false;
+            isAssignedToUserForCgr = false;
         }
         else {
             alert("Please SEARCH persons you want assigne responsibility !!!");
@@ -76,8 +82,8 @@ $("#btn-add-group").click(function () {
 });
 
 $("#btn-add-task").click(function () {
-    if (ValidateInitiativeUpdates()) {
-        if (isAssignedToUser) {
+    if (ValidateTaskInputs()) {
+        if (isAssignedToUserForTask) {
             var title = $("#input-add-task-title").val(),
                 duedate = $("#input-add-task-duedate").val(),
                 assignedto = $("#assignedTo-search-result-user-id").val();
@@ -85,10 +91,10 @@ $("#btn-add-task").click(function () {
             AddTask(isRoutTask, instForAddNew, objForAddNew, parentIdForAddNew, title, duedate, assignedto);
             ClearHideTask();
             $("#btn-add-task").hide();
-            isAssignedToUser = false;
+            isAssignedToUserForTask = false;
         }
         else {
-            alert("Please SEARCH persons you want assigne task !!!");
+            alert("Please SEARCH person you want assigne task !!!");
         }
     }
 });
@@ -96,17 +102,14 @@ $("#btn-add-task").click(function () {
 
 //Update click functions
 $("#btn-update-initiative").click(function () {
-    if (isAssignedToUser) {
-        if (isChangedAssingedUser) {
-            isAssignedToUser = false;
-            isChangedAssingedUser = false;
-        }
-        else {
-            isAssignedToUser = true;
-        }
+    if (!isUpdateAssingedUserWgr) {
+        isAssignedToUserForWgr = true;
+    }
+    if (!isUpdateAssingedUserCgr) {
+        isAssignedToUserForCgr = true;
     }
     if (ValidateInitiativeUpdates()) {
-        if (isAssignedToUser) {
+        if (isAssignedToUserForWgr && isAssignedToUserForCgr) {
             var wgr = $("#wgr-search-result-user-id").val(),
                 cgr = $("#cgr-search-result-user-id").val(),
                 pdoc = $("#input-update-initiative-pdoc").val(),
@@ -115,10 +118,13 @@ $("#btn-update-initiative").click(function () {
                 pc = $("#input-update-initiative-pc").val(),
                 eac = $("#input-update-initiative-eac").val(),
                 ac = $("#input-update-initiative-ac").val(),
-                gap = $("#input-update-initiative-gap").val()
-            UpdateInitiative(instForUpdate, objForUpdate, tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
+                gap = $("#input-update-initiative-gap").val();
+            UpdateInitiative(tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap);
             ClearHideInitiativeUpdate();
-            isAssignedToUser = false;
+            isUpdateAssingedUserWgr = false;
+            isUpdateAssingedUserCgr = false;
+            isAssignedToUserForWgr = false;
+            isAssignedToUserForCgr = false;
         }
         else {
             alert("Please SEARCH persons you want assigne responsibility !!!");
@@ -127,18 +133,11 @@ $("#btn-update-initiative").click(function () {
 });
 
 $("#btn-update-task").click(function () {
-    if (isAssignedToUser) {
-        if (isChangedAssingedUser) {
-            isAssignedToUser = false;
-            isChangedAssingedUser = false;
-        }
-        else {
-            isAssignedToUser = true;
-        }
+    if (!isUpdateAssingedUserTask) {
+        isAssignedToUserForTask = true;
     }
-
-    if (ValidateInitiativeUpdates()) {
-        if (isAssignedToUser) {
+    if (ValidateTaskUpdates()) {
+        if (isAssignedToUserForTask) {
             var duedate = $("#input-update-task-duedate").val(),
                 assignedto = $("#assignedTo-search-result-user-id").val(),
                 status;
@@ -147,12 +146,13 @@ $("#btn-update-task").click(function () {
             } else {
                 status = 2;
             }
-            UpdateTask(instForUpdate, objForUpdate, idForUpdate, duedate, assignedto, status);
+            UpdateTask(idForUpdate, duedate, assignedto, status);
             ClearHideTaskUpdate();
-            isAssignedToUser = false;
+            isUpdateAssingedUserTask = false;
+            isAssignedToUserForTask = false;
         }
         else {
-            alert("Please SEARCH persons you want assigne task !!!");
+            alert("Please SEARCH person you want assigne task !!!");
         }
     }
 });
@@ -163,7 +163,7 @@ $("#btn-add-task-assignedto-search-user").click(function () {
     var userid = $("#input-add-task-assignedto").val();
     var data = GetADUserNameById(userid);
     if (data) {
-        isAssignedToUser = true;
+        isAssignedToUserForTask = true;
         $("#input-add-task-assignedto").val(data);
         $("#assignedTo-search-result-user-id").val(userid);
     }
@@ -173,11 +173,11 @@ $("#btn-add-task-assignedto-search-user").click(function () {
 });
 
 $("#btn-add-initiative-wgr-search-user").click(function () {
-    var userid = $("#input-add-task-wgr").val();
+    var userid = $("#input-add-initiative-wgr").val();
     var data = GetADUserNameById(userid);
     if (data) {
-        isAssignedToUser = true;
-        $("#input-add-task-wgr").val(data);
+        isAssignedToUserForWgr = true;
+        $("#input-add-initiative-wgr").val(data);
         $("#wgr-search-result-user-id").val(userid);
     }
     else {
@@ -186,11 +186,11 @@ $("#btn-add-initiative-wgr-search-user").click(function () {
 });
 
 $("#btn-add-initiative-cgr-search-user").click(function () {
-    var userid = $("#input-add-task-cgr").val();
+    var userid = $("#input-add-initiative-cgr").val();
     var data = GetADUserNameById(userid);
     if (data) {
-        isAssignedToUser = true;
-        $("#input-add-task-cgr").val(data);
+        isAssignedToUserForCgr = true;
+        $("#input-add-initiative-cgr").val(data);
         $("#cgr-search-result-user-id").val(userid);
     }
     else {
@@ -202,7 +202,7 @@ $("#btn-update-initiative-wgr-search-user").click(function () {
     var userid = $("#input-update-initiative-wgr").val();
     var data = GetADUserNameById(userid);
     if (data) {
-        isAssignedToUser = true;
+        isAssignedToUserForWgr = true;
         $("#input-update-initiative-wgr").val(data);
         $("#wgr-search-result-user-id").val(userid);
     }
@@ -215,7 +215,7 @@ $("#btn-update-initiative-cgr-search-user").click(function () {
     var userid = $("#input-update-initiative-cgr").val();
     var data = GetADUserNameById(userid);
     if (data) {
-        isAssignedToUser = true;
+        isAssignedToUserForCgr = true;
         $("#input-update-initiative-cgr").val(data);
         $("#cgr-search-result-user-id").val(userid);
     }
@@ -225,16 +225,39 @@ $("#btn-update-initiative-cgr-search-user").click(function () {
 });
 
 $("#btn-update-task-assignedto-search-user").click(function () {
-    var userid = $("#input-update-task-title").val();
+    var userid = $("#input-update-task-assignedto").val();
     var data = GetADUserNameById(userid);
     if (data) {
-        isAssignedToUser = true;
-        $("#input-update-task-title").val(data);
+        isAssignedToUserForTask = true;
+        $("#input-update-task-assignedto").val(data);
         $("#assignedTo-search-result-user-id").val(userid);
     }
     else {
         alert("No such user in AD. Please try again !!!")
     }
+});
+
+
+//Edit user update click functions
+$("#btn-update-initiative-wgr-edit-user").click(function () {
+    $("#input-update-initiative-wgr").val('');
+    $("#input-update-initiative-wgr").prop("disabled", false);
+    $("#btn-update-initiative-wgr-search-user").prop("disabled", false);
+    isUpdateAssingedUserWgr = true;
+});
+
+$("#btn-update-initiative-cgr-edit-user").click(function () {
+    $("#input-update-initiative-cgr").val('');
+    $("#input-update-initiative-cgr").prop("disabled", false);
+    $("#btn-update-initiative-cgr-search-user").prop("disabled", false);
+    isUpdateAssingedUserCgr = true;
+});
+
+$("#btn-update-task-assignedto-edit-user").click(function () {
+    $("#input-update-task-assignedto").val('');
+    $("#input-update-task-assignedto").prop("disabled", false);
+    $("#btn-update-task-assignedto-search-user").prop("disabled", false);
+    isUpdateAssingedUserTask = true;
 });
 
 
@@ -258,21 +281,23 @@ function GetADUserNameById(userid) {
 
 //Tree data
 function TreeData() {
-    var data = {
-        url: "../Tree/GetTree",
-        type: "GET",
-        data: { currentUser },
-        datatype: "json"
-    };
-    //if (getAssignedRefresh) {
-    //    data = {
-    //        url: "../Tree/GetTree",
-    //        type: "GET",
-    //        data: currentUser,
-    //        datatype: "json"
-    //    };
-    //    getAssignedRefresh = false;
-    //}
+    var data;
+    if (getAssignedRefresh) {
+        data = {
+            url: "../Tree/GetTree",
+            type: "POST",
+            data: { currentUser },
+            datatype: "json"
+        };
+    }
+    else {
+        data = {
+            url: "../Tree/GetTree",
+            type: "POST",
+            data: null,
+            datatype: "json"
+        };
+    }
 
     return data;
 }
@@ -288,13 +313,14 @@ $('#jstree').jstree({
         "check_callback": true
     },
     "contextmenu": {
-        items: function (o, cb) { // Could be an object directly
+        items: function (node) { // Could be an object directly
             var items = {
                 "create": {
                     "separator_before": false,
                     "separator_after": true,
                     "_disabled": false, //(this.check("create_node", data.reference, {}, "last")),
                     "label": "Create",
+                    "icon": "fa fa-plus",
                     "action": function (data) {
                         instForAddNew = $.jstree.reference(data.reference);
                         objForAddNew = instForAddNew.get_node(data.reference);
@@ -335,6 +361,7 @@ $('#jstree').jstree({
                     "separator_after": true,
                     "_disabled": false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
                     "label": "Update",
+                    "icon": "fa fa-pencil",
                     "action": function (data) {
                         instForUpdate = $.jstree.reference(data.reference);
                         objForUpdate = instForUpdate.get_node(data.reference);
@@ -355,13 +382,18 @@ $('#jstree').jstree({
                             ClearHideTaskUpdate();
                             $("#input-update-task-title").val(objForUpdate.original.text);
                             $("#input-update-task-duedate").val(objForUpdate.data.due_Date);
-                            $("#input-update-task-assignedto").val(objForUpdate.data.assignedTo);
+                            if (objForUpdate.data.status == "Open") { $("#input-update-task-status").prop('checked', true).change(); } else { $("#input-update-task-status").prop('checked', false).change(); }
+                            $("#input-update-task-assignedto").val(objForUpdate.data.username);
                             $("#assignedTo-search-result-user-id").val(objForUpdate.data.assignedTo);
                             $("#prompt-update-task").show();
 
                         }
                     }
                 },
+            }
+
+            if (node.id.substring(0, 1) == "G" && node.original.templateName == "") {
+                delete items.update;
             }
 
             return items;
@@ -371,22 +403,16 @@ $('#jstree').jstree({
         columns: [
             { width: "500", header: "Title", headerClass: "customheaderclass0" },
             { width: "300", value: "status", header: "Status", headerClass: "customheaderclass1" },
-            { width: "300", value: "assignedTo", header: "Assigned To", headerClass: "customheaderclass2" },
+            { width: "300", value: "username", header: "Assigned To", headerClass: "customheaderclass2" },
             { width: "300", value: "due_Date", header: "DueDate", headerClass: "customheaderclass3" },
             { width: "300", value: "exdended_date_count", header: "", headerClass: "customheaderclass4" }
         ],
-        contextmenu: true,
-        resizable: true,
-        draggable: true,
     }
 });
-
+//Js tree chnge event
 $('#jstree').on("changed.jstree", function (e, data) {
     if (isRefresh) {
         isRefresh = false;
-    }
-    else if (getAssignedRefresh) {
-        getAssignedRefresh = false;
     }
     else {
         $("#tbl_side_view").hide();
@@ -417,18 +443,21 @@ $('#jstree').on("changed.jstree", function (e, data) {
 
 
 //Assigned to me click function
-$("#assinged-to-me").click(function () {
-    //$('#jstree').jstree('search', "SP7403");
-    //$('#jstree').jstree(true).searchColumn("SP7403");
-    //getAssignedRefresh = true;
-    //var data = {
-    //    url: "../Tree/GetTree",
-    //    type: "GET",
-    //    data: { currentUser },
-    //    datatype: "json"
-    //};
-    //$("#jstree").jstree(true).settings.core.data = data;
-    //$("#jstree").jstree(true).refresh();
+$("#btn-assinged-to-me").click(function () {
+    $("#tbl_side_view").hide();
+    getAssignedRefresh = true;
+    isRefresh = true;
+    $("#jstree").jstree(true).settings.core.data = TreeData();
+    $("#jstree").jstree(true).refresh();
+});
+
+//All tasks click function
+$("#btn-all-tasks").click(function () {
+    $("#tbl_side_view").hide();
+    getAssignedRefresh = false;
+    isRefresh = true;
+    $("#jstree").jstree(true).settings.core.data = TreeData();
+    $("#jstree").jstree(true).refresh();
 });
 
 
@@ -441,6 +470,15 @@ $(".close").click(function () {
     $("#prompt-update-task").hide();
     $("#btn-add-task-rout").hide();
     $("#btn-add-task").hide();
+
+    $("#input-update-initiative-wgr").prop("disabled", true);
+    $("#input-update-initiative-cgr").prop("disabled", true);
+    $("#input-update-task-assignedto").prop("disabled", true);
+
+    $("#btn-update-initiative-wgr-search-user").prop("disabled", true);
+    $("#btn-update-initiative-cgr-search-user").prop("disabled", true);
+    $("#btn-update-task-assignedto-search-user").prop("disabled", true);
+
 
     //Remove validation add group
     document.getElementById("input-add-group-title").style.borderColor = "";
@@ -492,9 +530,13 @@ function AddGroup(instForAddNew, objForAddNew, parentIdForAddNew, title) {
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
+                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
+        }
+        else {
+            alert("Process not complete due to system issue. Please try again!!!")
         }
     });
 }
@@ -530,9 +572,13 @@ function AddInitiative(instForAddNew, objForAddNew, parentIdForAddNew, title, wg
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
+                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
+        }
+        else {
+            alert("Process not complete due to system issue. Please try again!!!")
         }
     });
 }
@@ -575,16 +621,20 @@ function AddTask(isRoutTask, instForAddNew, objForAddNew, parentIdForAddNew, tit
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
+                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
+        }
+        else {
+            alert("Process not complete due to system issue. Please try again!!!")
         }
     });
 }
 
 
 //Update Functions
-function UpdateTask(instForUpdate, objForUpdate, idForUpdate, duedate, assignedto, statusid) {
+function UpdateTask(idForUpdate, duedate, assignedto, statusid) {
     var status = {
         Id: statusid
     };
@@ -602,16 +652,19 @@ function UpdateTask(instForUpdate, objForUpdate, idForUpdate, duedate, assignedt
         data: task
     }).done(function (data) {
         if (data) {
-            instForUpdate.create_node(objForUpdate, {}, "last", function (new_node) {
-                instForUpdate.edit(new_node);
-                $("#jstree").jstree(true).refresh();
-                isRefresh = true;
-            });
+            if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+            $("#jstree").jstree(true).refresh();
+            $("#input-update-task-assignedto").prop("disabled", true);
+            $("#btn-update-task-assignedto-search-user").prop("disabled", true);
+            isRefresh = true;
+        }
+        else {
+            alert("Update not complete due to system issue. Please try again!!!")
         }
     });
 }
 
-function UpdateInitiative(instForUpdate, objForUpdate, tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap) {
+function UpdateInitiative(tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap) {
     var template = {
         Id: tridForUpdate,
         Name: "TTS.TMPL.Initiatives"
@@ -636,11 +689,16 @@ function UpdateInitiative(instForUpdate, objForUpdate, tridForUpdate, wgr, cgr, 
         data: { template, inititiative }
     }).done(function (data) {
         if (data) {
-            instForUpdate.create_node(objForUpdate, {}, "last", function (new_node) {
-                instForUpdate.edit(new_node);
-                $("#jstree").jstree(true).refresh();
-                isRefresh = true;
-            });
+            if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+            $("#jstree").jstree(true).refresh();
+            $("#input-update-initiative-wgr").prop("disabled", true);
+            $("#input-update-initiative-cgr").prop("disabled", true);
+            $("#btn-update-initiative-wgr-search-user").prop("disabled", true);
+            $("#btn-update-initiative-cgr-search-user").prop("disabled", true);
+            isRefresh = true;
+        }
+        else {
+            alert("Update not complete due to system issue. Please try again!!!")
         }
     });
 }
@@ -672,8 +730,10 @@ function GetTemplateDetails(selectedTemplateName, selectedTemplateId, selectedIn
         $("#tbl_side_view").show();
         $("#div-initiative-name").append("<h3 class='panel-title'>" + selectedInitiativeName + "</h3>");
         for (i = 0; i < data.length; i++) {
+            if (data[i].Item == 'Work Group Responsibility') { data[i].Value = GetADUserNameById(data[i].Value); }
+            if (data[i].Item == 'Core Group Responsibility') { data[i].Value = GetADUserNameById(data[i].Value); }
             if (data[i].Item != 'Id') {
-                $('#tbl_side_view_tbl tbody').append("<tr> <td style='vertical-align: top; '>" + data[i].Item + "</td>  <td style='vertical-align: top; '>" + data[i].Value + "</td> </tr>");
+                $('#tbl_side_view_tbl tbody').append("<tr> <td style='vertical-align: top; '>" + data[i].Item + "</td> <td style='vertical-align: inherit; '> : </td>  <td style='vertical-align: top; '>" + data[i].Value + "</td> </tr>");
             }
         }
     });
@@ -696,21 +756,39 @@ function GetTemplateDetailsForUpdate(selectedTemplateId) {
         datatype: "json",
         data: group
     }).done(function (data) {
-        if (typeof data[1] != 'undefined') {
-            $("#input-update-initiative-wgr").val(data[1].Value);
-            $("#wgr-search-result-user-id").val(data[1].Value);
+        for (var i = 1; i < data.length; i++) {
+            switch (data[i].Item) {
+                case "work_group_responsibility":
+                    $("#input-update-initiative-wgr").val(GetADUserNameById(data[i].Value));
+                    $("#wgr-search-result-user-id").val(data[i].Value);
+                    break;
+                case "core_group_responsibility":
+                    $("#input-update-initiative-cgr").val(GetADUserNameById(data[i].Value));
+                    $("#cgr-search-result-user-id").val(data[i].Value);
+                    break;
+                case "projected_DOC":
+                    $("#input-update-initiative-pdoc").val(data[i].Value);
+                    break;
+                case "projected_net_revenue":
+                    $("#input-update-initiative-pnr").val(data[i].Value);
+                    break;
+                case "not_carried_through_and_why":
+                    $("#input-update-initiative-inctaw").val(data[i].Value);
+                    break;
+                case "projected_contribution_1":
+                    $("#input-update-initiative-pc").val(data[i].Value);
+                    break;
+                case "expected_achieved_contribution_1":
+                    $("#input-update-initiative-eac").val(data[i].Value);
+                    break;
+                case "achieved_contribution_1":
+                    $("#input-update-initiative-ac").val(data[i].Value);
+                    break;
+                case "GAP":
+                    $("#input-update-initiative-gap").val(data[i].Value);
+                    break;
+            }
         }
-        if (typeof data[3] != 'undefined') {
-            $("#input-update-initiative-cgr").val(data[3].Value);
-            $("#cgr-search-result-user-id").val(data[3].Value);
-        }
-        if (typeof data[5] != 'undefined') { $("#input-update-initiative-pdoc").val(data[5].Value); }
-        if (typeof data[4] != 'undefined') { $("#input-update-initiative-pnr").val(data[4].Value); }
-        if (typeof data[2] != 'undefined') { $("#input-update-initiative-inctaw").val(data[2].Value); }
-        if (typeof data[6] != 'undefined') { $("#input-update-initiative-pc").val(data[6].Value); }
-        if (typeof data[7] != 'undefined') { $("#input-update-initiative-eac").val(data[7].Value); }
-        if (typeof data[8] != 'undefined') { $("#input-update-initiative-ac").val(data[8].Value); }
-        if (typeof data[9] != 'undefined') { $("#input-update-initiative-gap").val(data[9].Value); }
     });
 }
 
@@ -942,6 +1020,7 @@ function ValidateGroupInputs() {
     }
     return result;
 }
+
 $("#input-add-group-title").keypress(function () {
     document.getElementById("input-add-group-title").style.borderColor = "";
 });
@@ -1004,12 +1083,10 @@ function ValidateInitiativeUpdates() {
 }
 
 $("#input-update-initiative-wgr").keypress(function () {
-    isChangedAssingedUser = true;
     document.getElementById("input-update-initiative-wgr").style.borderColor = "";
 });
 
 $("#input-update-initiative-cgr").keypress(function () {
-    isChangedAssingedUser = true;
     document.getElementById("input-update-initiative-cgr").style.borderColor = "";
 });
 
@@ -1073,7 +1150,6 @@ $("#input-update-task-duedate").change(function () {
 });
 
 $("#input-update-task-assignedto").keypress(function () {
-    isChangedAssingedUser = true;
     document.getElementById("input-update-task-assignedto").style.borderColor = "";
 });
 

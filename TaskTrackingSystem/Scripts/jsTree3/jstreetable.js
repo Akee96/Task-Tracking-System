@@ -204,7 +204,7 @@ var isTTSStatusOpen;
                         '.jstree-table-midwrapper {display: table-row;}',
                         '.jstree-table-width-auto {width:auto;display:inline-table;}',
 /*diplay table cell to inlin */    						'.jstree-table-column {display: inline-table; overflow: hidden;max-width: none !important;}',
-                        '.jstree-table-col-0 {width: calc(100% - 18px); overflow: hidden; text-overflow: ellipsis;}',
+                    /*width: calc(100% - 18px);*/ '.jstree-table-col-0 {overflow: hidden; text-overflow: ellipsis;}',
                         '.jstree-table-sort-icon {font-size: 8px; position: absolute; top:0; left: calc(50% - 4px);}',
                         '.jstree-table-midwrapper a.jstree-clicked, .jstree-table-midwrapper a.jstree-hovered{background: transparent; border-color: transparent;}',
                         '.jstree-table-midwrapper a.jstree-clicked:before, .jstree-table-midwrapper a.jstree-hovered:before {position: absolute; left: 0; content:""; height: inherit; z-index: -1;}',
@@ -916,12 +916,12 @@ var isTTSStatusOpen;
                         if (gs.context) {
                             e.preventDefault();
                             $.vakata.context.show(this, { 'x': e.pageX, 'y': e.pageY }, {
-                                "edit": {
-                                    label: "Edit", "action": function (data) {
-                                        var obj = t.get_node(node);
-                                        _this._edit(obj, col, e.target);
-                                    }
-                                }
+                                //"edit": {
+                                //    label: "Edit", "action": function (data) {
+                                //        var obj = t.get_node(node);
+                                //        _this._edit(obj, col, e.target);
+                                //    }
+                                //}
                             });
                         }
                     };
@@ -1112,9 +1112,11 @@ var isTTSStatusOpen;
                     // Date color red if expired
                     if (isTTSStatusOpen) {
                         if (content.charAt(2) == "/" || content.charAt(5) == "/") {
-                            contentdate = new Date(content);
+                            var contentdate = new Date(content);
+                            contentdate = contentdate.getFullYear() + "/" + (contentdate.getMonth() + 1) + "/" + contentdate.getDate();
                             var todaydate = new Date();
-                            if (contentdate > todaydate) {
+                            todaydate = todaydate.getFullYear() + "/" + (todaydate.getMonth() + 1) + "/" + todaydate.getDate();
+                            if (contentdate < todaydate) {
                                 valClass = "dateredclass";
                                 isTTSStatusOpen = false;
                             }

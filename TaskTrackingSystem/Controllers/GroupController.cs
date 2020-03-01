@@ -42,9 +42,9 @@ namespace TaskTrackingSystem.Controllers
             return Json(isSuccess);
         }
 
-        public List<Group> GetGroups()
+        public List<Group> GetGroups(int Id)
         {
-            return groupBL.GetGroups();
+            return groupBL.GetGroups(Id);
         }
     }
 }

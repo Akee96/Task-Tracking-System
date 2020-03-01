@@ -69,10 +69,12 @@ namespace TTS.Data
             return isSuccess;
         }
 
-        public List<Task> GetTasks()
+        public List<Task> GetTasks(string assignedUser)
         {
             Func<SqlCommand, List<Task>> injector = cmd =>
             {
+                cmd.Parameters.Add("@AssignedTo", SqlDbType.VarChar).Value = assignedUser;
+
                 List<Task> tasks = new List<Task>();
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {

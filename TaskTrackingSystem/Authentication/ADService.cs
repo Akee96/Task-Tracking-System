@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.DirectoryServices;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Configuration;
-using System.Data;
 
 namespace Authentication
 {
@@ -17,8 +12,8 @@ namespace Authentication
         /// <param name="userid"></param>
         /// <returns></returns>
         public string getFullName(string userid)
-       {
-            
+        {
+
             StringBuilder fullName = new StringBuilder();
             try
             {
@@ -28,7 +23,7 @@ namespace Authentication
                 DirectorySearcher dirSearcher = new DirectorySearcher(UpdateDE);
                 dirSearcher.Filter = "(&(objectCategory=Person)(objectClass=user)(SAMAccountName=" + userid + "))";
                 dirSearcher.SearchScope = SearchScope.Subtree;
-                SearchResult searchResults = dirSearcher.FindOne();       
+                SearchResult searchResults = dirSearcher.FindOne();
 
                 //Log4NetLogger.Info("search result");
                 //Log4NetLogger.Info(searchResults);
@@ -43,14 +38,14 @@ namespace Authentication
                     {
                         fullName = fullName.Append(searchResults.GetDirectoryEntry().Properties["givenName"].Value.ToString()).Append(" ");
                     }
-                    if(searchResults.GetDirectoryEntry().Properties["sn"].Value != null)
+                    if (searchResults.GetDirectoryEntry().Properties["sn"].Value != null)
                     {
                         fullName.Append(searchResults.GetDirectoryEntry().Properties["sn"].Value.ToString());
                     }
-                          
+
                 }
                 //Log4NetLogger.Info(fullName);
-                
+
             }
             catch (Exception ex)
             {
@@ -109,7 +104,7 @@ namespace Authentication
             string officeext = string.Empty;
             string personalEmail = string.Empty;
             string personalNo = string.Empty;
-           
+
             var ADres = new string[5];
             try
             {
@@ -143,9 +138,9 @@ namespace Authentication
                     if (searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value != null)
                     {
                         ADres[3] = searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value.ToString();
-                        
+
                     }
-                }               
+                }
             }
             catch (Exception ex)
             {
