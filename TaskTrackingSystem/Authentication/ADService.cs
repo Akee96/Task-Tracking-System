@@ -6,6 +6,8 @@ namespace Authentication
 {
     public class ADService
     {
+        string userName = System.Configuration.ConfigurationManager.AppSettings["username"];
+        string passWord = System.Configuration.ConfigurationManager.AppSettings["password"];
         /// <summary>
         /// Get fullname from AD
         /// </summary>
@@ -18,7 +20,7 @@ namespace Authentication
             try
             {
                 //userid = "UL\\SP7403";
-                DirectoryEntry UpdateDE = new DirectoryEntry("LDAP://srilankan.corp", "SP7401", "Airnut@456");
+                DirectoryEntry UpdateDE = new DirectoryEntry("LDAP://srilankan.corp", userName, passWord);
                 //DirectoryEntry UpdateDE = new DirectoryEntry("LDAP://srilankan.corp");
                 DirectorySearcher dirSearcher = new DirectorySearcher(UpdateDE);
                 dirSearcher.Filter = "(&(objectCategory=Person)(objectClass=user)(SAMAccountName=" + userid + "))";

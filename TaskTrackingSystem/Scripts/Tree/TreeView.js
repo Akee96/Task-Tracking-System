@@ -429,6 +429,7 @@ $('#jstree').on("changed.jstree", function (e, data) {
                 var getNode = $('#jstree').jstree(true).get_node(data.node.parents[i]);
                 selectedTemplateName = getNode.original.templateName;
                 selectedTemplateId = getNode.original.templateId;
+                selectedInitiativeName = getNode.text;
                 if (selectedTemplateName != "" && selectedTemplateName != null) {
                     inList = true;
                     break;

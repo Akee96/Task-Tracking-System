@@ -14,7 +14,7 @@ namespace Authentication
         public ADConnector()
         {
             //UpdateDE = new DirectoryEntry();
-            DirectoryEntry UpdateDE = new DirectoryEntry("LDAP://srilankan.corp", "SP7401", "Airnut@456");
+            DirectoryEntry UpdateDE = new DirectoryEntry();
             dirSearcher = new DirectorySearcher(UpdateDE);
         }
 
