@@ -4,7 +4,7 @@
     string currentUser = currentUserServer;
     string currentUserId = currentUser.Substring(currentUserServer.LastIndexOf("\\", StringComparison.Ordinal) + 1).ToUpper();
 
-    if (currentUserId == "AKALANKA")
+    if (currentUserId == "AKALANKA" || currentUserId == "DEFAULTAPPPOOL")
     {
         currentUserId = "SP7403";
     }
@@ -69,7 +69,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <script type="text/javascript">
         var commonStrings = {
-            CurrentUser: @currentUserId
+            CurrentUser: "@currentUserId"
         };
     </script>
 

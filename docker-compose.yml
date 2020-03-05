@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  tasktrackingsystem:
+    image: ${DOCKER_REGISTRY-}tasktrackingsystem
+    build:
+      context: .\TaskTrackingSystem
+      dockerfile: Dockerfile

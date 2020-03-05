@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTS.Data", "TTS.Data\TTS.Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TTS.Business", "TTS.Business\TTS.Business.csproj", "{13AC7395-02AA-40F1-91F7-9BCF13D4BE17}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{8E7C64EF-9ED6-4279-BA04-ACB4ABB525E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{13AC7395-02AA-40F1-91F7-9BCF13D4BE17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13AC7395-02AA-40F1-91F7-9BCF13D4BE17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13AC7395-02AA-40F1-91F7-9BCF13D4BE17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7C64EF-9ED6-4279-BA04-ACB4ABB525E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7C64EF-9ED6-4279-BA04-ACB4ABB525E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7C64EF-9ED6-4279-BA04-ACB4ABB525E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7C64EF-9ED6-4279-BA04-ACB4ABB525E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
