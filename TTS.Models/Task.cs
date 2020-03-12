@@ -12,5 +12,6 @@ namespace TTS.Models
         public string AssignTo { get; set; }
         public TaskStatus Status { get; set; }
         public int ExtendedDateCount { get; set; }
+        public string ActualCost { get; set; }
     }
 }

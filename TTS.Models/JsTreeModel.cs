@@ -25,5 +25,6 @@
         public string status { get; set; }
         public string exdended_date_count { get; set; }
         public string username { get; set; }
+        public string actual_cost { get; set; }
     }
 }

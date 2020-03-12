@@ -20,6 +20,12 @@ namespace TTS.Data
                 cmd.Parameters.Add("@WorkGroupResponsibility", SqlDbType.VarChar).Value = inititiative.WorkGroupResponsibility;
                 cmd.Parameters.Add("@CoreGroupResponsibility", SqlDbType.VarChar).Value = inititiative.CoreGroupResponsibility;
                 cmd.Parameters.Add("@InitiativeWhyNotCarried", SqlDbType.VarChar).Value = inititiative.InitiativeWhyNotCarried;
+                cmd.Parameters.Add("@EstimatedCost", SqlDbType.VarChar).Value = inititiative.EstimatedCost;
+                cmd.Parameters.Add("@EstimatedRevenue", SqlDbType.VarChar).Value = inititiative.EstimatedRevenue;
+                cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = inititiative.StartDate;
+                cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = inititiative.EndDate;
+                cmd.Parameters.Add("@EffectiveFromDate", SqlDbType.DateTime).Value = inititiative.EffectiveFromDate;
+                cmd.Parameters.Add("@EffectiveToDate", SqlDbType.DateTime).Value = inititiative.EffectiveToDate;
                 cmd.Parameters.Add("@ProjectedDOC", SqlDbType.VarChar).Value = inititiative.ProjectedDOC;
                 cmd.Parameters.Add("@ProjectedNetRevenue", SqlDbType.VarChar).Value = inititiative.ProjectedNetRevenue;
                 cmd.Parameters.Add("@ProjectedContribution", SqlDbType.VarChar).Value = inititiative.ProjectedContribution;
@@ -53,6 +59,12 @@ namespace TTS.Data
                     cmd.Parameters.Add("@CoreGroupResponsibility", SqlDbType.VarChar).Value = inititiative.CoreGroupResponsibility;
                     cmd.Parameters.Add("@InitiativeWhyNotCarried", SqlDbType.VarChar).Value = inititiative.InitiativeWhyNotCarried;
                     cmd.Parameters.Add("@ProjectedDOC", SqlDbType.VarChar).Value = inititiative.ProjectedDOC;
+                    cmd.Parameters.Add("@EstimatedCost", SqlDbType.VarChar).Value = inititiative.EstimatedCost;
+                    cmd.Parameters.Add("@EstimatedRevenue", SqlDbType.VarChar).Value = inititiative.EstimatedRevenue;
+                    cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = inititiative.StartDate;
+                    cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = inititiative.EndDate;
+                    cmd.Parameters.Add("@EffectiveFromDate", SqlDbType.DateTime).Value = inititiative.EffectiveFromDate;
+                    cmd.Parameters.Add("@EffectiveToDate", SqlDbType.DateTime).Value = inititiative.EffectiveToDate;
                     cmd.Parameters.Add("@ProjectedNetRevenue", SqlDbType.VarChar).Value = inititiative.ProjectedNetRevenue;
                     cmd.Parameters.Add("@ProjectedContribution", SqlDbType.VarChar).Value = inititiative.ProjectedContribution;
                     cmd.Parameters.Add("@AchievedContribution", SqlDbType.VarChar).Value = inititiative.AchievedContribution;

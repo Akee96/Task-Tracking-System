@@ -22,6 +22,7 @@ namespace TTS.Data
                     cmd.Parameters.Add("@ParentId", SqlDbType.Int).Value = task.ParentId;
                     cmd.Parameters.Add("@DueDate", SqlDbType.DateTime).Value = task.DueDate;
                     cmd.Parameters.Add("@AssignTo", SqlDbType.VarChar).Value = task.AssignTo;
+                    cmd.Parameters.Add("@ActualCost", SqlDbType.VarChar).Value = task.ActualCost;
                     cmd.Parameters.Add("@CreatedUser", SqlDbType.VarChar).Value = task.CreatedUser;
                     cmd.Parameters.Add("@IsActive", SqlDbType.Bit).Value = task.IsActive;
 
@@ -53,6 +54,7 @@ namespace TTS.Data
                     cmd.Parameters.Add("@DueDate", SqlDbType.DateTime).Value = task.DueDate;
                     cmd.Parameters.Add("@AssignTo", SqlDbType.VarChar).Value = task.AssignTo;
                     cmd.Parameters.Add("@StatusId", SqlDbType.Int).Value = task.Status.Id;
+                    cmd.Parameters.Add("@ActualCost", SqlDbType.VarChar).Value = task.ActualCost;
                     //cmd.Parameters.Add("@IsActive", SqlDbType.Bit).Value = task.IsActive;
 
                     cmd.ExecuteReader();
@@ -95,7 +97,7 @@ namespace TTS.Data
                             },
                             AssignTo = rdr["AssignedTo"].ToString(),
                             //IsActive = (bool)rdr["IsActive"],
-                            //CreatedUser = rdr["CreatedUser"].ToString(),
+                            ActualCost = rdr["ActualCost"].ToString(),
                             DueDate = rdr["Due_Date"] == DBNull.Value ? Convert.ToDateTime(null) : Convert.ToDateTime(rdr["Due_Date"]),
                             ExtendedDateCount = (rdr["DateExtendedCount"]) == DBNull.Value ? 0 : Convert.ToInt32(rdr["DateExtendedCount"])
                         };
