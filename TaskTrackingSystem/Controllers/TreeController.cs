@@ -59,7 +59,8 @@ namespace TaskTrackingSystem.Controllers
                             due_Date = (item.DueDate.ToString() == "1/1/0001 12:00:00 AM") ? "" : item.DueDate.ToString("MM/dd/yyyy"),
                             status = item.Status.Name.ToString(),
                             exdended_date_count = item.ExtendedDateCount == 0 ? null : item.ExtendedDateCount.ToString(),
-                            username = aDService.getFullName(item.AssignTo.ToString())
+                            username = aDService.getFullName(item.AssignTo.ToString()),
+                            actual_cost = item.ActualCost.ToString()
                         }
                     });
                 }
@@ -97,7 +98,8 @@ namespace TaskTrackingSystem.Controllers
                             due_Date = (item.DueDate.ToString() == "1/1/0001 12:00:00 AM") ? "" : item.DueDate.ToString("MM/dd/yyyy"),
                             status = item.Status.Name.ToString(),
                             exdended_date_count = item.ExtendedDateCount == 0 ? null : item.ExtendedDateCount.ToString(),
-                            username = aDService.getFullName(item.AssignTo.ToString())
+                            username = aDService.getFullName(item.AssignTo.ToString()),
+                            actual_cost = item.ActualCost.ToString()
                         }
                     });
                 }

@@ -1113,15 +1113,15 @@ var isTTSStatusOpen;
                     if (isTTSStatusOpen) {
                         if (content.charAt(2) == "/" || content.charAt(5) == "/") {
                             var contentdate = new Date(content);
-                            contentdate = contentdate.getFullYear() + "/" + (contentdate.getMonth() + 1) + "/" + contentdate.getDate();
+                            //contentdate = contentdate.getFullYear() + "/" + (contentdate.getMonth() + 1) + "/" + contentdate.getDate();
                             var todaydate = new Date();
-                            todaydate = todaydate.getFullYear() + "/" + (todaydate.getMonth() + 1) + "/" + todaydate.getDate();
-                            if (contentdate < todaydate) {
-                                valClass = "dateredclass";
-                                isTTSStatusOpen = false;
-                            }
-
-
+                            //todaydate = todaydate.getFullYear() + "/" + (todaydate.getMonth() + 1) + "/" + todaydate.getDate();
+                            if ((contentdate.getFullYear() + "/" + (contentdate.getMonth() + 1) + "/" + contentdate.getDate()) != (todaydate.getFullYear() + "/" + (todaydate.getMonth() + 1) + "/" + todaydate.getDate())) {
+                                if (contentdate < todaydate) {
+                                    valClass = "dateredclass";
+                                    isTTSStatusOpen = false;
+                                }
+                            }                               
                         }
                     }
 

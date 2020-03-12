@@ -6,8 +6,8 @@ namespace Authentication
 {
     public class ADService
     {
-        string userName = System.Configuration.ConfigurationManager.AppSettings["username"];
-        string passWord = System.Configuration.ConfigurationManager.AppSettings["password"];
+        string userName = System.Configuration.ConfigurationManager.AppSettings["ADusername"];
+        string passWord = System.Configuration.ConfigurationManager.AppSettings["ADpassword"];
         /// <summary>
         /// Get fullname from AD
         /// </summary>
