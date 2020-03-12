@@ -92,6 +92,7 @@ namespace TTS.Data
                 cmd.Parameters.Add("@TemplateName", SqlDbType.VarChar).Value = group.Template.Name;
                 cmd.Parameters.Add("@TemplateRecordId", SqlDbType.VarChar).Value = group.Template.Id.ToString();
 
+                DateTime date;
                 List<Template> templates = new List<Template>();
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
@@ -106,6 +107,21 @@ namespace TTS.Data
                             //CreatedUser = rdr["CreatedUser"].ToString(),
                             //CreatedDate = (DateTime)rdr["CreatedDate"]
                         };
+                        switch (template.Item)
+                        {
+                            case "start_date":
+                                date = Convert.ToDateTime(template.Value); template.Value = date.ToString("MM/dd/yyyy");
+                                break;
+                            case "end_date":
+                                date = Convert.ToDateTime(template.Value); template.Value = date.ToString("MM/dd/yyyy");
+                                break;
+                            case "effective_from_date":
+                                date = Convert.ToDateTime(template.Value); template.Value = date.ToString("MM/dd/yyyy");
+                                break;
+                            case "effective_to_date":
+                                date = Convert.ToDateTime(template.Value); template.Value = date.ToString("MM/dd/yyyy");
+                                break;
+                        }
                         templates.Add(template);
                     }
                 }
