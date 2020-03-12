@@ -1102,10 +1102,6 @@ function GetTemplateDetails(selectedTemplateName, selectedTemplateId, selectedIn
         for (i = 0; i < data.length; i++) {
             if (data[i].Item == 'Work Group Responsibility') { data[i].Value = GetADUserNameById(data[i].Value); }
             if (data[i].Item == 'Core Group Responsibility') { data[i].Value = GetADUserNameById(data[i].Value); }
-            if (data[i].Item == 'Start Date') { var date = new Date(data[i].Value); data[i].Value = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(); }
-            if (data[i].Item == 'End Date') { var date = new Date(data[i].Value); data[i].Value = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(); }
-            if (data[i].Item == 'Effective From Date') { var date = new Date(data[i].Value); data[i].Value = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(); }
-            if (data[i].Item == 'Effective To Date') { var date = new Date(data[i].Value); data[i].Value = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(); }
             if (data[i].Item != 'Id') {
                 $('#tbl_side_view_tbl tbody').append("<tr> <td style='vertical-align: top; '>" + data[i].Item + "</td> <td style='vertical-align: inherit; '> : </td>  <td style='vertical-align: top; '>" + data[i].Value + "</td> </tr>");
             }
@@ -1166,23 +1162,15 @@ function GetTemplateDetailsForUpdate(selectedTemplateId) {
                     $("#input-update-initiative-er").val(data[i].Value);
                     break;
                 case "start_date":
-                    var date = new Date(data[i].Value);
-                    data[i].Value = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
                     $("#input-update-initiative-sd").val(data[i].Value);
                     break;
-                case "end_date":
-                    var date = new Date(data[i].Value);
-                    data[i].Value = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+                case "end_date":                   
                     $("#input-update-initiative-ed").val(data[i].Value);
                     break;
                 case "effective_from_date":
-                    var date = new Date(data[i].Value);
-                    data[i].Value = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
                     $("#input-update-initiative-efd").val(data[i].Value);
                     break;
                 case "effective_to_date":
-                    var date = new Date(data[i].Value);
-                    data[i].Value = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
                     $("#input-update-initiative-etd").val(data[i].Value);
                     break;
             }
