@@ -1,7 +1,8 @@
 ﻿var currentUser = commonStrings.CurrentUser;
 var currentuserName;
 var isRefresh;
-var getAssignedRefresh;
+var getAssignedRefresh,
+    getOverDueRefresh;
 var isAssignedToUserForTask,
     isAssignedToUserForWgr,
     isAssignedToUserForCgr,
@@ -186,22 +187,24 @@ $('#jstree').on("changed.jstree", function (e, data) {
 //Tree data
 function TreeData() {
     var data;
+    var task = {};
     if (getAssignedRefresh) {
-        data = {
-            url: "../Tree/GetTree",
-            type: "POST",
-            data: { currentUser },
-            datatype: "json"
+        task = {
+            AssignTo: currentUser
         };
     }
-    else {
-        data = {
-            url: "../Tree/GetTree",
-            type: "POST",
-            data: null,
-            datatype: "json"
+    else if (getOverDueRefresh){
+        task = {
+            IsGetOverdue: true
         };
     }
+
+    data = {
+        url: "../Tree/GetTree",
+        type: "POST",
+        data: task,
+        datatype: "json"
+    };
 
     return data;
 }
@@ -242,7 +245,7 @@ function AddGroup(instForAddNew, objForAddNew, parentIdForAddNew, title) {
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
-                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+                if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
@@ -350,7 +353,7 @@ function AddInitiative(instForAddNew, objForAddNew, parentIdForAddNew, title, wg
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
-                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+                if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
@@ -587,7 +590,7 @@ function AddTask(isRoutTask, instForAddNew, objForAddNew, parentIdForAddNew, tit
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
-                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+                if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
@@ -747,7 +750,7 @@ function UpdateTask(idForUpdate, duedate, assignedto, statusid, actualCost) {
         data: task
     }).done(function (data) {
         if (data) {
-            if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+            if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
             $("#jstree").jstree(true).refresh();
             $("#input-update-task-assignedto").prop("disabled", true);
             $("#btn-update-task-assignedto-search-user").prop("disabled", true);
@@ -949,7 +952,7 @@ function UpdateInitiative(tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, a
         data: { template, inititiative }
     }).done(function (data) {
         if (data) {
-            if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+            if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
             $("#jstree").jstree(true).refresh();
             $("#input-update-initiative-wgr").prop("disabled", true);
             $("#input-update-initiative-cgr").prop("disabled", true);
@@ -1207,16 +1210,31 @@ $("#btn-assinged-to-me").click(function () {
     $("#jstree").jstree(true).refresh();
     $("#btn-assinged-to-me").addClass("active");
     $("#btn-all-tasks").removeClass("active");
+    $("#btn-overdue-tasks").removeClass("active");
 });
 
 //All tasks click function
 $("#btn-all-tasks").click(function () {
     $("#tbl_side_view").hide();
     getAssignedRefresh = false;
+    getOverDueRefresh = false;
     isRefresh = true;
     $("#jstree").jstree(true).settings.core.data = TreeData();
     $("#jstree").jstree(true).refresh();
     $("#btn-all-tasks").addClass("active");
+    $("#btn-assinged-to-me").removeClass("active");
+    $("#btn-overdue-tasks").removeClass("active");
+});
+
+//OverDue tasks click function
+$("#btn-overdue-tasks").click(function () {
+    $("#tbl_side_view").hide();
+    getOverDueRefresh = true;
+    isRefresh = true;
+    $("#jstree").jstree(true).settings.core.data = TreeData();
+    $("#jstree").jstree(true).refresh();
+    $("#btn-overdue-tasks").addClass("active");
+    $("#btn-all-tasks").removeClass("active");
     $("#btn-assinged-to-me").removeClass("active");
 });
 //#endregion
