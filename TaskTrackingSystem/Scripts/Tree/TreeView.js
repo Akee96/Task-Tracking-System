@@ -223,9 +223,25 @@ $('#jstree').jstree({
                             $("#update-task-div-actual-cost").hide();
                             $("#input-update-task-title").val(objForUpdate.original.text);
                             $("#input-update-task-duedate").val(objForUpdate.data.due_Date);
+                            $("#input-update-task-status").prop('disabled', false).change();
                             if (objForUpdate.data.status == "Open") { $("#input-update-task-status").prop('checked', true).change(); } else { $("#input-update-task-status").prop('checked', false).change(); }
                             $("#input-update-task-assignedto").val(objForUpdate.data.username);
                             $("#assignedTo-search-result-user-id").val(objForUpdate.data.assignedTo);
+
+                            if (objForUpdate.children.length != 0) {
+                                var isExsistOpenTasks;
+                                for (var i = 0; i < objForUpdate.children.length; i++) {
+                                    var child = $('#jstree').jstree(true).get_node(objForUpdate.children[i]);
+                                    if (child.data.status == "Open") {
+                                        isExsistOpenTasks = true;
+                                        break;
+                                    }
+                                }
+                                if (isExsistOpenTasks) {
+                                    $("#input-update-task-status").prop('disabled', true).change();
+                                }
+                            }
+
                             $("#prompt-update-task").show();
 
                         }
@@ -248,7 +264,6 @@ $('#jstree').jstree({
             else {
                 delete generalItems.createGroup;
                 delete generalItems.createItem;
-                delete generalItems.createTask;
             }
 
             return generalItems;
