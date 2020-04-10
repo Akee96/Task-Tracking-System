@@ -71,11 +71,12 @@ namespace TTS.Data
             return isSuccess;
         }
 
-        public List<Task> GetTasks(string assignedUser)
+        public List<Task> GetTasks(Task taskParam)
         {
             Func<SqlCommand, List<Task>> injector = cmd =>
             {
-                cmd.Parameters.Add("@AssignedTo", SqlDbType.VarChar).Value = assignedUser;
+                cmd.Parameters.Add("@AssignedTo", SqlDbType.VarChar).Value = taskParam.AssignTo;
+                cmd.Parameters.Add("@IsGetOverdue", SqlDbType.Bit).Value = taskParam.IsGetOverdue==true ? 1 : 0;
 
                 List<Task> tasks = new List<Task>();
                 using (SqlDataReader rdr = cmd.ExecuteReader())

@@ -11,9 +11,9 @@ namespace TTS.Business
     public class TemplateBL
     {
         private TemplateDL templateDL = new TemplateDL();
-        public Template AddTemplateDetails(Inititiative inititiative)
+        public Template AddTemplateDetails(Inititiative inititiative,Item item)
         {
-            return templateDL.AddTemplateDetails(inititiative);
+            return templateDL.AddTemplateDetails(inititiative, item);
         }
 
         public bool UpdateTemplateDetails(Template template, Inititiative inititiative)

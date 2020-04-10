@@ -13,5 +13,6 @@ namespace TTS.Models
         public TaskStatus Status { get; set; }
         public int ExtendedDateCount { get; set; }
         public string ActualCost { get; set; }
+        public bool IsGetOverdue { get; set; }
     }
 }

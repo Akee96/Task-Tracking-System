@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using System.Web.Script.Serialization;
 using TTS.Business;
 using TTS.Models;
 
@@ -12,15 +8,16 @@ namespace TaskTrackingSystem.Controllers
     public class GroupController : Controller
     {
         private GroupBL groupBL = new GroupBL();
-       
-        public JsonResult AddGroup(Group group, Inititiative inititiative)
+
+        public JsonResult AddGroup(Group group, Inititiative inititiative, Item item)
         {
             bool isSuccess = false;
             TemplateController templateController = new TemplateController();
             Template template = null;
-            if (inititiative != null)
+            if (inititiative != null || item != null)
             {
-                template = templateController.AddTemplateDetails(inititiative);
+                template = templateController.AddTemplateDetails(inititiative, item);
+
                 if (template.Id != 0)
                 {
                     group.Template.Id = template.Id;
@@ -29,7 +26,7 @@ namespace TaskTrackingSystem.Controllers
                         isSuccess = true;
                     }
                 }
-                
+
             }
             else
             {

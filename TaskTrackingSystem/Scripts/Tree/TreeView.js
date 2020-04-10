@@ -1,7 +1,9 @@
 ﻿var currentUser = commonStrings.CurrentUser;
 var currentuserName;
-var isRefresh;
-var getAssignedRefresh;
+var isRefresh,
+    isRoutTask;
+var getAssignedRefresh,
+    getOverDueRefresh;
 var isAssignedToUserForTask,
     isAssignedToUserForWgr,
     isAssignedToUserForCgr,
@@ -53,7 +55,7 @@ $('#jstree').jstree({
     },
     "contextmenu": {
         items: function (node) { // Could be an object directly
-            var items = {
+            var routLabItems = {
                 "create": {
                     "separator_before": false,
                     "separator_after": true,
@@ -65,7 +67,6 @@ $('#jstree').jstree({
                         objForAddNew = instForAddNew.get_node(data.reference);
                         parentIdForAddNew = objForAddNew.id.substring(1);
 
-                        var isRoutTask;
                         if (objForAddNew.id.substring(0, 1) == "G") {
                             if (objForAddNew.original.templateName != "") {
                                 ClearHideTask();
@@ -106,12 +107,13 @@ $('#jstree').jstree({
                         objForUpdate = instForUpdate.get_node(data.reference);
                         idForUpdate = objForUpdate.id.substring(1);
                         tridForUpdate = objForUpdate.original.templateId;
+                        var templateName = "TTS.TMPL.Initiatives";
 
                         if (objForUpdate.id.substring(0, 1) == "G") {
                             if (objForUpdate.original.templateName != "") {
                                 ClearHideInitiativeUpdate();
                                 $("#input-update-initiative-title").val(objForUpdate.original.text);
-                                GetTemplateDetailsForUpdate(tridForUpdate);
+                                GetTemplateDetailsForUpdate(tridForUpdate, templateName);
                                 $("#prompt-update-initiative").show();
 
                             }
@@ -132,11 +134,124 @@ $('#jstree').jstree({
                 },
             }
 
-            if (node.id.substring(0, 1) == "G" && node.original.templateName == "") {
-                delete items.update;
+            var generalItems = {
+                "createGroup": {
+                    "separator_before": false,
+                    "separator_after": true,
+                    "_disabled": false, //(this.check("create_node", data.reference, {}, "last")),
+                    "label": "Group",
+                    "icon": "fa fa-plus",
+                    "action": function (data) {
+                        instForAddNew = $.jstree.reference(data.reference);
+                        objForAddNew = instForAddNew.get_node(data.reference);
+                        parentIdForAddNew = objForAddNew.id.substring(1);
+
+                        ClearHideGroup();
+                        $("#prompt-add-group").show();
+
+                    }
+                },
+                "createItem": {
+                    "separator_before": false,
+                    "separator_after": true,
+                    "_disabled": false, //(this.check("create_node", data.reference, {}, "last")),
+                    "label": "Item",
+                    "icon": "fa fa-plus",
+                    "action": function (data) {
+                        instForAddNew = $.jstree.reference(data.reference);
+                        objForAddNew = instForAddNew.get_node(data.reference);
+                        parentIdForAddNew = objForAddNew.id.substring(1);
+
+                        ClearHideItem();
+                        $("#prompt-add-item").show();
+                    }
+                },
+                "createTask": {
+                    "separator_before": false,
+                    "separator_after": true,
+                    "_disabled": false, //(this.check("create_node", data.reference, {}, "last")),
+                    "label": "Task",
+                    "icon": "fa fa-plus",
+                    "action": function (data) {
+                        instForAddNew = $.jstree.reference(data.reference);
+                        objForAddNew = instForAddNew.get_node(data.reference);
+                        parentIdForAddNew = objForAddNew.id.substring(1);
+
+                        if (objForAddNew.id.substring(0, 1) == "G") {
+                            if (objForAddNew.original.templateName != "") {
+                                ClearHideTask();
+                                $("#add-task-div-actual-cost").hide();
+                                $("#btn-add-task-rout").show();
+                                $("#prompt-add-task").show();
+
+                            }
+                        }
+                        else {
+                            ClearHideTask();
+                            $("#add-task-div-actual-cost").hide();
+                            $("#prompt-add-task").show();
+                            $("#btn-add-task").show();
+
+                        }
+                    }
+                },
+                "update": {
+                    "separator_before": false,
+                    "separator_after": true,
+                    "_disabled": false, //(this.check("rename_node", data.reference, this.get_parent(data.reference), "")),
+                    "label": "Update",
+                    "icon": "fa fa-pencil",
+                    "action": function (data) {
+                        instForUpdate = $.jstree.reference(data.reference);
+                        objForUpdate = instForUpdate.get_node(data.reference);
+                        idForUpdate = objForUpdate.id.substring(1);
+                        tridForUpdate = objForUpdate.original.templateId;
+                        var templateName = "TTS.TMPL.Item";
+
+                        if (objForUpdate.id.substring(0, 1) == "G") {
+                            if (objForUpdate.original.templateName != "") {
+                                //ClearHideItem();
+                                //$("#input-update-item-title").val(objForUpdate.original.text);
+                                //GetTemplateDetailsForUpdate(tridForUpdate, templateName);
+                                //$("#prompt-update-item").show();
+
+                            }
+
+                        }
+                        else {
+                            ClearHideTaskUpdate();
+                            $("#update-task-div-actual-cost").hide();
+                            $("#input-update-task-title").val(objForUpdate.original.text);
+                            $("#input-update-task-duedate").val(objForUpdate.data.due_Date);
+                            if (objForUpdate.data.status == "Open") { $("#input-update-task-status").prop('checked', true).change(); } else { $("#input-update-task-status").prop('checked', false).change(); }
+                            $("#input-update-task-assignedto").val(objForUpdate.data.username);
+                            $("#assignedTo-search-result-user-id").val(objForUpdate.data.assignedTo);
+                            $("#prompt-update-task").show();
+
+                        }
+                    }
+                },
             }
 
-            return items;
+            if (node.id.substring(0, 1) == "G") {
+                if (node.original.templateName == "") {
+                    delete routLabItems.update;
+                    delete generalItems.update;
+                    delete generalItems.createTask;
+                }
+                else {
+                    delete generalItems.createGroup;
+                    delete generalItems.createItem;
+                    delete generalItems.update;
+                }
+            }
+            else {
+                delete generalItems.createGroup;
+                delete generalItems.createItem;
+                delete generalItems.createTask;
+            }
+
+            return generalItems;
         }
     },
     table: {
@@ -150,8 +265,16 @@ $('#jstree').jstree({
     }
 });
 
+
+$('#jstree').on("loaded.jstree", function (event, data) {
+    var node = $("#jstree").jstree().get_node('G1');
+    $("#jstree").jstree(true).delete_node(node);
+});
 //Js tree chnge event
 $('#jstree').on("changed.jstree", function (e, data) {
+    var node = $("#jstree").jstree().get_node('G1');
+    $("#jstree").jstree(true).delete_node(node);
+
     if (isRefresh) {
         isRefresh = false;
     }
@@ -186,22 +309,24 @@ $('#jstree').on("changed.jstree", function (e, data) {
 //Tree data
 function TreeData() {
     var data;
+    var task = {};
     if (getAssignedRefresh) {
-        data = {
-            url: "../Tree/GetTree",
-            type: "POST",
-            data: { currentUser },
-            datatype: "json"
+        task = {
+            AssignTo: currentUser
         };
     }
-    else {
-        data = {
-            url: "../Tree/GetTree",
-            type: "POST",
-            data: null,
-            datatype: "json"
+    else if (getOverDueRefresh) {
+        task = {
+            IsGetOverdue: true
         };
     }
+
+    data = {
+        url: "../Tree/GetTree",
+        type: "POST",
+        data: task,
+        datatype: "json"
+    };
 
     return data;
 }
@@ -233,16 +358,18 @@ function AddGroup(instForAddNew, objForAddNew, parentIdForAddNew, title) {
     };
     var inititiative = null;
 
+    var item = null;
+
     $.ajax({
         url: "../Group/AddGroup",
         type: "POST",
         datatype: "json",
-        data: { group, inititiative }
+        data: { group, inititiative, item }
     }).done(function (data) {
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
-                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+                if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
@@ -274,6 +401,82 @@ $("#input-add-group-title").keypress(function () {
 function ClearHideGroup() {
     $("#prompt-add-group").hide();
     $("#input-add-group-title").val('');
+    //Remove validation add group
+    document.getElementById("input-add-group-title").style.borderColor = "";
+}
+//#endregion
+
+//#endregion
+
+//#region Item
+
+$("#btn-add-item").click(function () {
+    if (ValidateItemInputs()) {
+        var title = $("#input-add-item-title").val(),
+            details = $("#input-add-item-dtl").val();
+        AddItem(instForAddNew, objForAddNew, parentIdForAddNew, title, details);
+        ClearHideItem();
+    }
+});
+
+function AddItem(instForAddNew, objForAddNew, parentIdForAddNew, title, details) {
+    var Template = {
+        Name: "TTS.TMPL.Item"
+    };
+    var group = {
+        Title: title,
+        ParentId: parentIdForAddNew,
+        CreatedUser: currentUser,
+        Template: Template
+    };
+    var inititiative = null;
+
+    var item = {
+        Details: details
+    };
+
+    $.ajax({
+        url: "../Group/AddGroup",
+        type: "POST",
+        datatype: "json",
+        data: { group, inititiative, item }
+    }).done(function (data) {
+        if (data) {
+            instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
+                instForAddNew.edit(new_node);
+                if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+                $("#jstree").jstree(true).refresh();
+                isRefresh = true;
+            });
+        }
+        else {
+            alert("Process not complete due to system issue. Please try again!!!")
+        }
+    });
+}
+
+//#region Validate Add Item
+function ValidateItemInputs() {
+    var result = false;
+    if ($("#input-add-item-title").val() == "") {
+        document.getElementById("input-add-item-title").style.borderColor = "red";
+        result = false;
+    }
+    else {
+        document.getElementById("input-add-item-title").style.borderColor = "";
+        result = true;
+    }
+    return result;
+}
+
+$("#input-add-item-title").keypress(function () {
+    document.getElementById("input-add-item-title").style.borderColor = "";
+});
+
+function ClearHideItem() {
+    $("#prompt-add-item").hide();
+    $("#input-add-item-title").val('');
+    $("#input-add-item-dtl").val('');
     //Remove validation add group
     document.getElementById("input-add-group-title").style.borderColor = "";
 }
@@ -341,16 +544,18 @@ function AddInitiative(instForAddNew, objForAddNew, parentIdForAddNew, title, wg
         EffectiveToDate: etd
     };
 
+    var item = null;
+
     $.ajax({
         url: "../Group/AddGroup",
         type: "POST",
         datatype: "json",
-        data: { group, inititiative }
+        data: { group, inititiative, item }
     }).done(function (data) {
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
-                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+                if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
@@ -587,7 +792,7 @@ function AddTask(isRoutTask, instForAddNew, objForAddNew, parentIdForAddNew, tit
         if (data) {
             instForAddNew.create_node(objForAddNew, {}, "last", function (new_node) {
                 instForAddNew.edit(new_node);
-                if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+                if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
                 $("#jstree").jstree(true).refresh();
                 isRefresh = true;
             });
@@ -747,7 +952,7 @@ function UpdateTask(idForUpdate, duedate, assignedto, statusid, actualCost) {
         data: task
     }).done(function (data) {
         if (data) {
-            if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+            if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
             $("#jstree").jstree(true).refresh();
             $("#input-update-task-assignedto").prop("disabled", true);
             $("#btn-update-task-assignedto-search-user").prop("disabled", true);
@@ -864,11 +1069,6 @@ $("#btn-update-initiative").click(function () {
     }
 });
 
-
-
-
-
-
 $("#btn-update-initiative-wgr-search-user").click(function () {
     var userid = $("#input-update-initiative-wgr").val();
     var data = GetADUserNameById(userid);
@@ -896,8 +1096,6 @@ $("#btn-update-initiative-cgr-search-user").click(function () {
 });
 
 
-
-
 //Edit user update click functions
 $("#btn-update-initiative-wgr-edit-user").click(function () {
     $("#input-update-initiative-wgr").val('');
@@ -914,10 +1112,7 @@ $("#btn-update-initiative-cgr-edit-user").click(function () {
 });
 
 
-
 //Update Functions
-
-
 function UpdateInitiative(tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, ac, gap, ec, er, sd, ed, efd, etd) {
     var template = {
         Id: tridForUpdate,
@@ -949,7 +1144,7 @@ function UpdateInitiative(tridForUpdate, wgr, cgr, pdoc, pnr, inctaw, pc, eac, a
         data: { template, inititiative }
     }).done(function (data) {
         if (data) {
-            if (getAssignedRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
+            if (getAssignedRefresh || getOverDueRefresh) { $("#jstree").jstree(true).settings.core.data = TreeData(); }
             $("#jstree").jstree(true).refresh();
             $("#input-update-initiative-wgr").prop("disabled", true);
             $("#input-update-initiative-cgr").prop("disabled", true);
@@ -1109,9 +1304,9 @@ function GetTemplateDetails(selectedTemplateName, selectedTemplateId, selectedIn
     });
 }
 
-function GetTemplateDetailsForUpdate(selectedTemplateId) {
+function GetTemplateDetailsForUpdate(selectedTemplateId, templateName) {
     var Template = {
-        Name: "TTS.TMPL.Initiatives",
+        Name: templateName,
         Id: selectedTemplateId
     };
     var group = {
@@ -1164,7 +1359,7 @@ function GetTemplateDetailsForUpdate(selectedTemplateId) {
                 case "start_date":
                     $("#input-update-initiative-sd").val(data[i].Value);
                     break;
-                case "end_date":                   
+                case "end_date":
                     $("#input-update-initiative-ed").val(data[i].Value);
                     break;
                 case "effective_from_date":
@@ -1201,22 +1396,39 @@ function GetADUserNameById(userid) {
 //Assigned to me click function
 $("#btn-assinged-to-me").click(function () {
     $("#tbl_side_view").hide();
+    getOverDueRefresh = false;
     getAssignedRefresh = true;
     isRefresh = true;
     $("#jstree").jstree(true).settings.core.data = TreeData();
     $("#jstree").jstree(true).refresh();
     $("#btn-assinged-to-me").addClass("active");
     $("#btn-all-tasks").removeClass("active");
+    $("#btn-overdue-tasks").removeClass("active");
 });
 
 //All tasks click function
 $("#btn-all-tasks").click(function () {
     $("#tbl_side_view").hide();
     getAssignedRefresh = false;
+    getOverDueRefresh = false;
     isRefresh = true;
     $("#jstree").jstree(true).settings.core.data = TreeData();
     $("#jstree").jstree(true).refresh();
     $("#btn-all-tasks").addClass("active");
+    $("#btn-assinged-to-me").removeClass("active");
+    $("#btn-overdue-tasks").removeClass("active");
+});
+
+//OverDue tasks click function
+$("#btn-overdue-tasks").click(function () {
+    $("#tbl_side_view").hide();
+    getAssignedRefresh = false;
+    getOverDueRefresh = true;
+    isRefresh = true;
+    $("#jstree").jstree(true).settings.core.data = TreeData();
+    $("#jstree").jstree(true).refresh();
+    $("#btn-overdue-tasks").addClass("active");
+    $("#btn-all-tasks").removeClass("active");
     $("#btn-assinged-to-me").removeClass("active");
 });
 //#endregion
@@ -1224,6 +1436,7 @@ $("#btn-all-tasks").click(function () {
 //#region Close Prompts
 $(".close").click(function () {
     $("#prompt-add-group").hide();
+    $("#prompt-add-item").hide();
     $("#prompt-add-initiative").hide();
     $("#prompt-add-task").hide();
     $("#prompt-update-initiative").hide();
@@ -1242,6 +1455,8 @@ $(".close").click(function () {
 
     //Remove validation add group
     document.getElementById("input-add-group-title").style.borderColor = "";
+    //Remove validation add item
+    document.getElementById("input-add-item-title").style.borderColor = "";
     //Remove validation add task
     document.getElementById("input-add-task-title").style.borderColor = "";
     document.getElementById("input-add-task-assignedto").style.borderColor = "";
@@ -1266,15 +1481,3 @@ $(".close").click(function () {
 
 });
 //#endregion
-
-
-
-
-
-
-
-
-
-
-
-

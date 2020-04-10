@@ -25,9 +25,9 @@ namespace TaskTrackingSystem.Controllers
             return Json(taskBL.UpdateTask(task));
         }
 
-        public List<Task> GetTasks(string assignedUser)
+        public List<Task> GetTasks(Task task)
         {
-            return taskBL.GetTasks(assignedUser);
+            return taskBL.GetTasks(task);
         }
     }
 }
