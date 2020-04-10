@@ -18,13 +18,13 @@ namespace TaskTrackingSystem.Controllers
             {
                 GetTreeDataByParam(task);
             }
-            else if(task.DueDate != null)
+            else if(task.IsGetOverdue)
             {
                 GetTreeDataByParam(task);
             }
             else
             {
-                List<Task> tasks = taskController.GetTasks(null);
+                List<Task> tasks = taskController.GetTasks(task);
                 List<Group> groups = groupController.GetGroups(0);
 
                 foreach (var item in groups)

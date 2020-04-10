@@ -30,4 +30,9 @@ namespace TTS.Models
         public DateTime EffectiveFromDate { get; set; }
         public DateTime EffectiveToDate { get; set; }
     }
+
+    public class Item
+    {
+        public string Details { get; set; }
+    }
 }

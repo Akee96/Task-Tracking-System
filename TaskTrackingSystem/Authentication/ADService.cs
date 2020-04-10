@@ -54,7 +54,7 @@ namespace Authentication
                 //Log4NetLogger.Info("exp");
                 //Log4NetLogger.Error("Error : " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name, ex);
 
-                return string.Empty;
+                return String.Empty;
 
             }
             //Log4NetLogger.Error(fullName.ToString());
@@ -68,89 +68,89 @@ namespace Authentication
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        public string getEmailAddress(string userid)
-        {
-            string email = string.Empty;
-            try
-            {
-                DirectoryEntry UpdateDE = new DirectoryEntry();
-                DirectorySearcher dirSearcher = new DirectorySearcher(UpdateDE);
-                dirSearcher.Filter = "(&(objectCategory=Person)(objectClass=user)(SAMAccountName=" + userid + "))";
-                dirSearcher.SearchScope = SearchScope.Subtree;
-                SearchResult searchResults = dirSearcher.FindOne();
+        //public string getEmailAddress(string userid)
+        //{
+        //    string email = string.Empty;
+        //    try
+        //    {
+        //        DirectoryEntry UpdateDE = new DirectoryEntry();
+        //        DirectorySearcher dirSearcher = new DirectorySearcher(UpdateDE);
+        //        dirSearcher.Filter = "(&(objectCategory=Person)(objectClass=user)(SAMAccountName=" + userid + "))";
+        //        dirSearcher.SearchScope = SearchScope.Subtree;
+        //        SearchResult searchResults = dirSearcher.FindOne();
 
-                if (searchResults != null)
-                {
-                    DirectoryEntry dirEntryResults = new DirectoryEntry(searchResults.Path);
-                    if (searchResults.GetDirectoryEntry().Properties["mail"].Value != null)
-                        email = searchResults.GetDirectoryEntry().Properties["mail"].Value.ToString();
-                }
-            }
-            catch (Exception f)
-            {
-                return string.Empty;
+        //        if (searchResults != null)
+        //        {
+        //            DirectoryEntry dirEntryResults = new DirectoryEntry(searchResults.Path);
+        //            if (searchResults.GetDirectoryEntry().Properties["mail"].Value != null)
+        //                email = searchResults.GetDirectoryEntry().Properties["mail"].Value.ToString();
+        //        }
+        //    }
+        //    catch (Exception f)
+        //    {
+        //        return string.Empty;
 
-            }
-            return email;
-        }
+        //    }
+        //    return email;
+        //}
 
         /// <summary>
         /// Get Active Directory Details
         /// </summary>
         /// <param name="userid"></param>
         /// <returns></returns>
-        public string[] getADDetails(string userid)
-        {
-            string officeNo = string.Empty;
-            string mobileNo = string.Empty;
-            string officeext = string.Empty;
-            string personalEmail = string.Empty;
-            string personalNo = string.Empty;
+        //public string[] getADDetails(string userid)
+        //{
+        //    string officeNo = string.Empty;
+        //    string mobileNo = string.Empty;
+        //    string officeext = string.Empty;
+        //    string personalEmail = string.Empty;
+        //    string personalNo = string.Empty;
 
-            var ADres = new string[5];
-            try
-            {
-                //DirectoryEntry UpdateDE = new DirectoryEntry(ConfigurationManager.AppSettings["ADDomain"], ConfigurationManager.AppSettings["ADAuthUser"], ConfigurationManager.AppSettings["ADAuthPass"]);
-                DirectoryEntry UpdateDE = new DirectoryEntry();
+        //    var ADres = new string[5];
+        //    try
+        //    {
+        //        //DirectoryEntry UpdateDE = new DirectoryEntry(ConfigurationManager.AppSettings["ADDomain"], ConfigurationManager.AppSettings["ADAuthUser"], ConfigurationManager.AppSettings["ADAuthPass"]);
+        //        DirectoryEntry UpdateDE = new DirectoryEntry();
 
-                DirectorySearcher dirSearcher = new DirectorySearcher(UpdateDE);
-                dirSearcher.Filter = "(&(objectCategory=Person)(objectClass=user)(SAMAccountName=" + userid + "))";
-                dirSearcher.SearchScope = SearchScope.Subtree;
-                SearchResult searchResults = dirSearcher.FindOne();
+        //        DirectorySearcher dirSearcher = new DirectorySearcher(UpdateDE);
+        //        dirSearcher.Filter = "(&(objectCategory=Person)(objectClass=user)(SAMAccountName=" + userid + "))";
+        //        dirSearcher.SearchScope = SearchScope.Subtree;
+        //        SearchResult searchResults = dirSearcher.FindOne();
 
-                if (searchResults != null)
-                {
-                    DirectoryEntry dirEntryResults = new DirectoryEntry(searchResults.Path);
-                    if (searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value != null)
-                    {
-                        officeNo = searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value.ToString();
-                        ADres[0] = (officeNo.Contains("+94") == true) ? officeNo.Replace("+94", "0") : officeNo;
-                    }
-                    if (searchResults.GetDirectoryEntry().Properties["Mobile"].Value != null)
-                    {
-                        ADres[1] = searchResults.GetDirectoryEntry().Properties["Mobile"].Value.ToString().Trim();
-                        //ADres[1] = (mobileNo.Contains("+94") == true) ? mobileNo.Replace("+94", "0") : mobileNo;
-                    }
+        //        if (searchResults != null)
+        //        {
+        //            DirectoryEntry dirEntryResults = new DirectoryEntry(searchResults.Path);
+        //            if (searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value != null)
+        //            {
+        //                officeNo = searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value.ToString();
+        //                ADres[0] = (officeNo.Contains("+94") == true) ? officeNo.Replace("+94", "0") : officeNo;
+        //            }
+        //            if (searchResults.GetDirectoryEntry().Properties["Mobile"].Value != null)
+        //            {
+        //                ADres[1] = searchResults.GetDirectoryEntry().Properties["Mobile"].Value.ToString().Trim();
+        //                //ADres[1] = (mobileNo.Contains("+94") == true) ? mobileNo.Replace("+94", "0") : mobileNo;
+        //            }
 
-                    if (searchResults.GetDirectoryEntry().Properties["mail"].Value != null)
-                    {
-                        ADres[2] = searchResults.GetDirectoryEntry().Properties["mail"].Value.ToString();
-                    }
+        //            if (searchResults.GetDirectoryEntry().Properties["mail"].Value != null)
+        //            {
+        //                ADres[2] = searchResults.GetDirectoryEntry().Properties["mail"].Value.ToString();
+        //            }
 
-                    if (searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value != null)
-                    {
-                        ADres[3] = searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value.ToString();
+        //            if (searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value != null)
+        //            {
+        //                ADres[3] = searchResults.GetDirectoryEntry().Properties["telephoneNumber"].Value.ToString();
 
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                //Log4NetLogger.Error("Error : " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name, ex);
-                return null;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Log4NetLogger.Error("Error : " + System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.Name, ex);
+        //        return null;
 
-            }
-            return ADres;
-        }
+        //    }
+        //    return ADres;
+        //}
     }
 }
