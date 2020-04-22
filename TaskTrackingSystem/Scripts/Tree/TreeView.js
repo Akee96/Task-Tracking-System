@@ -248,7 +248,6 @@ $('#jstree').jstree({
             else {
                 delete generalItems.createGroup;
                 delete generalItems.createItem;
-                delete generalItems.createTask;
             }
 
             return generalItems;
